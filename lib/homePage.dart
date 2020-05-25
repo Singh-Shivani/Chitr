@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void loadMoreImages(int pageNumber) async {
+  void loadMoreImages() async {
     try {
       pageNumber = pageNumber + 1;
       var data = await FetchImages().getLatestImages(pageNumber);
@@ -37,15 +37,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    super.initState();
     getLatestImages(pageNumber);
     _scrollController.addListener(() {
       if (_scrollController.offset >=
-              _scrollController.position.minScrollExtent &&
+              _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
-        loadMoreImages(pageNumber);
+        loadMoreImages();
       }
     });
-    super.initState();
   }
 
   @override
@@ -100,11 +100,12 @@ class _HomePageState extends State<HomePage> {
                       );
                     } else {
                       return ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            items[index][2],
-                            fit: BoxFit.cover,
-                          ));
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          items[index][2],
+                          fit: BoxFit.cover,
+                        ),
+                      );
                     }
                   }),
             ],
