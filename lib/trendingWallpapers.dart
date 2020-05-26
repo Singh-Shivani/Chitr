@@ -1,22 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'networking.dart';
 import 'imageView.dart';
 
-class HomePage extends StatefulWidget {
+class TrendingWallpaperPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _TrendingWallpaperPageState createState() => _TrendingWallpaperPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
   int pageNumber = 1;
   List items = [];
 
   ScrollController _scrollController = ScrollController();
 
-  void getLatestImages(int pageNumber) async {
+  void getTrendingImages(int pageNumber) async {
     try {
-      var data = await FetchImages().getLatestImages(pageNumber);
+      var data = await FetchImages().getTrendingImages(pageNumber);
       setState(() {
         items = data;
       });
@@ -41,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    getLatestImages(pageNumber);
+    getTrendingImages(pageNumber);
     _scrollController.addListener(() {
       if (_scrollController.offset >=
               _scrollController.position.maxScrollExtent &&
@@ -60,6 +59,10 @@ class _HomePageState extends State<HomePage> {
           margin: EdgeInsets.only(top: 20),
           child: Column(
             children: <Widget>[
+              Text(
+                'data',
+                style: TextStyle(color: Colors.black38),
+              ),
               GridView.builder(
                   controller: _scrollController,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

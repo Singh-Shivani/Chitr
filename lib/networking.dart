@@ -23,7 +23,6 @@ class FetchImages {
           listData.add(i['id']);
           listData.add(i['urls']['regular']);
           listData.add(i['urls']['thumb']);
-          listData.add(i['urls']['small']);
           listData.add(i['links']['download']);
 
           responseData.add(listData);
