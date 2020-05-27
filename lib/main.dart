@@ -56,20 +56,24 @@ class _MainHomePageState extends State<MainHomePage> {
         ),
       ),
       body: _children[_selectedIndex],
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.black,
-        height: 50,
-        index: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        items: <Widget>[
-          Icon(Icons.home, size: 24),
-          Icon(Icons.whatshot, size: 24),
-          Icon(Icons.favorite, size: 24),
-        ],
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+        child: CurvedNavigationBar(
+          color: Colors.white,
+//          backgroundColor: Colors.white,
+          height: 50,
+          index: _selectedIndex,
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          items: <Widget>[
+            Icon(Icons.home, size: 24),
+            Icon(Icons.whatshot, size: 24),
+            Icon(Icons.favorite, size: 24),
+          ],
+        ),
       ),
     );
   }

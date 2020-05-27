@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
     try {
       pageNumber = pageNumber + 1;
       var data = await FetchImages().getLatestImages(pageNumber);
-      print('here');
       setState(() {
         items.addAll(data);
       });

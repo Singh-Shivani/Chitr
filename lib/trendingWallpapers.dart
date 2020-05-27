@@ -45,6 +45,7 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
       if (_scrollController.offset >=
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
+        print('here');
         loadMoreImages();
       }
     });
