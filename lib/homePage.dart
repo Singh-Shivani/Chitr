@@ -53,13 +53,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          margin: EdgeInsets.only(top: 20),
-          child: Column(
-            children: <Widget>[
-              GridView.builder(
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        margin: EdgeInsets.only(top: 20),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: GridView.builder(
                   controller: _scrollController,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 0.57,
@@ -103,8 +103,8 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                   }),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
