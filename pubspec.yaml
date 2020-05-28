@@ -18,7 +18,8 @@ dependencies:
   cupertino_icons: ^0.1.3
   http: ^0.12.1
   curved_navigation_bar: ^0.3.2
-  searchable_dropdown: ^1.1.3
+  like_button: ^0.2.0
+  image_downloader: ^0.19.2
 
 
 dev_dependencies:
