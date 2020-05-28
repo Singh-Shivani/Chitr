@@ -28,7 +28,6 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
     try {
       pageNumber = pageNumber + 1;
       var data = await FetchImages().getLatestImages(pageNumber);
-      print('here');
       setState(() {
         items.addAll(data);
       });
@@ -45,7 +44,6 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
       if (_scrollController.offset >=
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
-        print('here');
         loadMoreImages();
       }
     });
@@ -63,7 +61,7 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
               child: GridView.builder(
                   controller: _scrollController,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 0.57,
+                    childAspectRatio: 0.6,
                     crossAxisCount: 2,
                     mainAxisSpacing: 12,
                     crossAxisSpacing: 12,

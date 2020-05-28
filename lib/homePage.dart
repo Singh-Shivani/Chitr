@@ -53,19 +53,18 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        margin: EdgeInsets.only(top: 20),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Column(
           children: <Widget>[
             Expanded(
               child: GridView.builder(
                   controller: _scrollController,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 0.57,
+                    childAspectRatio: 0.6,
                     crossAxisCount: 2,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
                   ),
                   itemCount: items.length + 1,
                   shrinkWrap: true,

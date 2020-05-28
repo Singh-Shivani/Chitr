@@ -3,6 +3,7 @@ import 'homePage.dart';
 import 'trendingWallpapers.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'favImages.dart';
+import 'searchedImagePage.dart';
 
 void main() {
   runApp(MyApp());
@@ -45,7 +46,12 @@ class _MainHomePageState extends State<MainHomePage> {
               color: Colors.black,
             ),
             onPressed: () {
-              // do something
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchedImagePage(),
+                ),
+              );
             },
           )
         ],
@@ -60,7 +66,7 @@ class _MainHomePageState extends State<MainHomePage> {
       ),
       body: _children[_selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
-        color: Color.fromRGBO(186, 181, 179, 0.6),
+        color: Color.fromRGBO(224, 220, 218, 0.6),
         backgroundColor: Colors.transparent,
         buttonBackgroundColor: Colors.white,
         height: 50,
