@@ -2,13 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:like_button/like_button.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'favImagesFunctionPage.dart';
 import 'package:image_downloader/image_downloader.dart';
 
 class ImageView extends StatelessWidget {
   final List items;
-  final int index;
-  ImageView({this.index, this.items});
+  bool existence;
+
+  ImageView({this.items});
   Future<bool> downloadImage(bool isLiked) async {
     try {
       // Saved with this method.
@@ -27,9 +29,21 @@ class ImageView extends StatelessWidget {
       var size = await ImageDownloader.findByteSize(imageId);
       var mimeType = await ImageDownloader.findMimeType(imageId);
 
-//      toast('Downloaded!');
+      showOverlayNotification((context) {
+        return CustomNotificationOnPage(
+          icon: Icons.done,
+          iconColor: Colors.green,
+          subTitle: 'Downloaded',
+        );
+      }, duration: Duration(milliseconds: 3000));
     } on PlatformException catch (error) {
-//      toast("Sorry, couldn't download");
+      showOverlayNotification((context) {
+        return CustomNotificationOnPage(
+          icon: Icons.error_outline,
+          iconColor: Colors.red,
+          subTitle: "Sorry, couldn't download",
+        );
+      }, duration: Duration(milliseconds: 3000));
       print(error);
     }
 
@@ -37,8 +51,24 @@ class ImageView extends StatelessWidget {
   }
 
   Future<bool> addToFav(bool isLiked) async {
-    FavImages().addFavImages(items);
-//    toast('Added to Favs!');
+    existence = FavImages().addFavImages(items);
+    if (existence == true) {
+      showOverlayNotification((context) {
+        return CustomNotificationOnPage(
+          icon: Icons.favorite,
+          iconColor: Colors.black,
+          subTitle: 'This image is already in your Favourites.',
+        );
+      }, duration: Duration(milliseconds: 3000));
+    } else {
+      showOverlayNotification((context) {
+        return CustomNotificationOnPage(
+          icon: Icons.favorite,
+          iconColor: Color.fromRGBO(245, 7, 59, 1),
+          subTitle: 'Image added in your Favourites.',
+        );
+      }, duration: Duration(milliseconds: 3000));
+    }
     return !isLiked;
   }
 
@@ -46,14 +76,14 @@ class ImageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Hero(
-        tag: items[index],
+        tag: items,
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: NetworkImage(
-                items[index][1],
+                items[1],
               ),
               fit: BoxFit.cover,
             ),
@@ -76,9 +106,7 @@ class ImageView extends StatelessWidget {
                       likeBuilder: (bool isLiked) {
                         return Icon(
                           Icons.cloud_download,
-                          color: isLiked
-                              ? Color.fromRGBO(108, 99, 255, 1)
-                              : Colors.black54,
+                          color: isLiked ? Colors.blueAccent : Colors.black54,
                           size: 30,
                         );
                       },
@@ -96,7 +124,7 @@ class ImageView extends StatelessWidget {
                       },
                       onTap: addToFav,
                     ),
-                    InkWell(
+                    GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
                       },
@@ -111,6 +139,46 @@ class ImageView extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomNotificationOnPage extends StatelessWidget {
+  final String subTitle;
+  final Color iconColor;
+  final IconData icon;
+  CustomNotificationOnPage(
+      {@required this.subTitle, @required this.iconColor, @required this.icon});
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 4),
+      child: SafeArea(
+        child: ListTile(
+          leading: SizedBox.fromSize(
+            size: Size(40, 40),
+            child: Icon(
+              icon,
+              color: iconColor,
+              size: 30,
+            ),
+          ),
+          title: Text(
+            'Chitr',
+            style: TextStyle(
+                fontFamily: 'DancingScript',
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2,
+                fontSize: 20),
+          ),
+          subtitle: Text(subTitle),
+          trailing: IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                OverlaySupportEntry.of(context).dismiss();
+              }),
         ),
       ),
     );

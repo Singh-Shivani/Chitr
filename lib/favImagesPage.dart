@@ -21,34 +21,35 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        (items.length == 0)
-            ? Text('no fav img')
-            : Expanded(
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 0.6,
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                  ),
-                  itemCount: items.length,
-                  shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ImageView(items: items, index: index),
-                          ),
-                        );
-                      },
-                      child: Hero(
-                        tag: items[index],
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.only(top: 20, bottom: 20),
+      child: Column(
+        children: <Widget>[
+          (items.length == 0)
+              ? Text('no fav img')
+              : Expanded(
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 0.6,
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                    ),
+                    itemCount: items.length,
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ImageView(items: items[index]),
+                            ),
+                          );
+                        },
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Image.network(
@@ -56,12 +57,12 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
                             fit: BoxFit.cover,
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
-      ],
+        ],
+      ),
     );
   }
 }

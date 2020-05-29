@@ -79,13 +79,13 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
                         ),
                       );
                     } else {
-                      return InkWell(
+                      return GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  ImageView(items: items, index: index),
+                                  ImageView(items: items[index]),
                             ),
                           );
                         },

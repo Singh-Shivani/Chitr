@@ -4,6 +4,7 @@ import 'trendingWallpapers.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'favImagesPage.dart';
 import 'searchedImagePage.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,9 +13,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MainHomePage(),
+    return OverlaySupport(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MainHomePage(),
+      ),
     );
   }
 }

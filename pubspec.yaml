@@ -20,6 +20,7 @@ dependencies:
   curved_navigation_bar: ^0.3.2
   like_button: ^0.2.0
   image_downloader: ^0.19.2
+  overlay_support: ^1.0.4
 
 
 dev_dependencies:

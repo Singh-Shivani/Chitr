@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -79,13 +79,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     } else {
-                      return InkWell(
+                      return GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  ImageView(items: items, index: index),
+                                  ImageView(items: items[index]),
                             ),
                           );
                         },

@@ -59,62 +59,72 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  margin: EdgeInsets.only(top: 30, bottom: 10),
-                  child: TextField(
-                    controller: _textController,
-                    cursorColor: Color.fromRGBO(13, 26, 59, 1),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      suffixIcon: IconButton(
-                        onPressed: () => _textController.clear(),
-                        icon: Icon(
-                          Icons.clear,
-                          color: Color.fromRGBO(13, 26, 59, 1),
-                        ),
+          Padding(
+            padding: EdgeInsets.only(top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyApp(),
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                        borderSide: BorderSide(
-                            color: Color.fromRGBO(13, 26, 59, 0.8), width: 2),
-                      ),
-                      hintText: 'Search',
-                      hintStyle: TextStyle(letterSpacing: 1),
-                    ),
-                    onSubmitted: (value) {
-                      setState(() {
-                        searchText = value;
-                        getSearchedImages(pageNumber, searchText);
-                      });
-                    },
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyApp(),
-                    ),
-                  );
-                },
-                child: Container(
+                    );
+                  },
+                  child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     margin: EdgeInsets.only(top: 30),
-                    child: Icon(Icons.arrow_forward_ios)),
-              )
-            ],
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(Icons.arrow_back_ios),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 30),
+                    margin: EdgeInsets.only(top: 40, bottom: 10),
+                    child: TextField(
+                      controller: _textController,
+                      cursorColor: Color.fromRGBO(13, 26, 59, 1),
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                        suffixIcon: IconButton(
+                          onPressed: () => _textController.clear(),
+                          icon: Icon(
+                            Icons.clear,
+                            color: Color.fromRGBO(13, 26, 59, 1),
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(width: 2),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(13, 26, 59, 0.8), width: 2),
+                        ),
+                        hintText: 'Search',
+                        hintStyle: TextStyle(letterSpacing: 1),
+                      ),
+                      onSubmitted: (value) {
+                        setState(() {
+                          searchText = value;
+                          getSearchedImages(pageNumber, searchText);
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          (searchText == null)
+          (searchText == null || searchText.isEmpty)
               ? Expanded(
                   child: Center(child: Text('Nothing to Show')),
                 )
@@ -145,13 +155,13 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                               ),
                             );
                           } else {
-                            return InkWell(
+                            return GestureDetector(
                               onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        ImageView(items: items, index: index),
+                                        ImageView(items: items[index]),
                                   ),
                                 );
                               },
