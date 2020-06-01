@@ -69,7 +69,7 @@ class _MainHomePageState extends State<MainHomePage> {
       ),
       body: _children[_selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
-        color: Color.fromRGBO(224, 220, 218, 0.6),
+        color: Color.fromRGBO(224, 220, 218, 0.65),
         backgroundColor: Colors.transparent,
         buttonBackgroundColor: Colors.white,
         height: 50,

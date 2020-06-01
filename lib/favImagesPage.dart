@@ -27,7 +27,9 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
       child: Column(
         children: <Widget>[
           (items.length == 0)
-              ? Text('no fav img')
+              ? Center(
+                  child: Text('No favourite Image'),
+                )
               : Expanded(
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -50,11 +52,18 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
                             ),
                           );
                         },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            items[index][2], //thumb image
-                            fit: BoxFit.cover,
+                        child: GestureDetector(
+                          onLongPress: () {
+                            setState(() {
+                              FavImages().removeFavImages(items[index]);
+                            });
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              items[index][2], //thumb image
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       );
