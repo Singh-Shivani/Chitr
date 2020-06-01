@@ -13,7 +13,7 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
   @override
   void initState() {
     super.initState();
-    //Used to store the favourites result
+
     setState(() {
       items = FavImages().getFavImages();
     });
@@ -21,16 +21,22 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      margin: EdgeInsets.only(top: 20, bottom: 20),
-      child: Column(
-        children: <Widget>[
-          (items.length == 0)
-              ? Expanded(
-                  child: Image.asset('images/Empty-bro.png'),
-                )
-              : Expanded(
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Center(
+            child: Text(
+              'LongPress on wallpaper you want\n to remove from Favourites!',
+              style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic),
+            ),
+          ),
+        ),
+        (items.length == 0)
+            ? Expanded(child: Image.asset('images/undraw_empty_xct9.png'))
+            : Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       childAspectRatio: 0.6,
@@ -70,8 +76,8 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
                     },
                   ),
                 ),
-        ],
-      ),
+              ),
+      ],
     );
   }
 }
