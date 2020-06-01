@@ -27,8 +27,8 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
       child: Column(
         children: <Widget>[
           (items.length == 0)
-              ? Center(
-                  child: Text('No favourite Image'),
+              ? Expanded(
+                  child: Image.asset('images/Empty-bro.png'),
                 )
               : Expanded(
                   child: GridView.builder(

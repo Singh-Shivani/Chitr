@@ -126,7 +126,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
           ),
           (searchText == null || searchText.isEmpty)
               ? Expanded(
-                  child: Center(child: Text('Nothing to Show')),
+                  child: Image.asset('images/undraw_web_search_eetr.png'),
                 )
               : Expanded(
                   child: Padding(
