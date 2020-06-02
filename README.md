@@ -27,7 +27,7 @@ All the images are fetched through [Unsplash API](https://unsplash.com/developer
 ## In action 👀
 
 <p align="center">
-  <img src="wallp.gif" height="550"/>
+  <img src="chitr.gif" height="550"/>
  </p>
  
 
