@@ -1,22 +1,21 @@
 <p align="center">
   <a href="https://github.com/Singh-Shivani/Chitr">
-    <img src="images/App Images/app_banner.png" alt="Logo">
+    <img src="App Images/banner.png" alt="Logo" style="width:400">
   </a>
-<h2 align="center">Chitr</h2> 
 </p>
 
 <p align ="center"> 
-A Wallpaper App using <a href="https://flutter.dev/">Flutter ❤</a>
+A Wallpaper App using <a href="https://flutter.dev/">Flutter💕</a>
 <br>
 <br>
-Powered by <a href="https://unsplash.com/">Unsplash</a>
+Powered by <a href="https://unsplash.com/">Unsplash💪</a>
 </p>
 
-## About the app🤩
+## About the app🥳
 
-Chitr provides all the basic requirements needed in a wallpaper app, like latest or trending wallpapers along with search, favourites and download a image!
+Chitr provides all the basic requirements needed in a wallpaper app, like latest or trending wallpapers along with search, favourites and download a image!🔥
 
-All the images are fetched through [Unsplash API](https://unsplash.com/developers) which gives realtime service so that you get the latest collections!
+All the images are fetched through [Unsplash API](https://unsplash.com/developers) which gives realtime service so that you get the latest collections!🤩
 
 ## Screens 📱
 
@@ -25,7 +24,7 @@ All the images are fetched through [Unsplash API](https://unsplash.com/developer
 <img src="images/App Images/Page_3.png" height="400" /> <img src="images/App Images/Page_4.png" height="400" hspace="100"/>
 </p>
 
-## In action 😎
+## In action 👀
 
 <p align="center">
   <img src="wallp.gif" height="550"/>
