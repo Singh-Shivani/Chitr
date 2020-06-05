@@ -102,15 +102,15 @@ class ImageView extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    LikeButton(
-                      likeBuilder: (bool isLiked) {
-                        return Icon(
-                          Icons.cloud_download,
-                          color: isLiked ? Colors.blueAccent : Colors.black54,
-                          size: 30,
-                        );
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
                       },
-                      onTap: downloadImage,
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        size: 30,
+                        color: Colors.black54,
+                      ),
                     ),
                     LikeButton(
                       likeBuilder: (bool isLiked) {
@@ -124,15 +124,15 @@ class ImageView extends StatelessWidget {
                       },
                       onTap: addToFav,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
+                    LikeButton(
+                      likeBuilder: (bool isLiked) {
+                        return Icon(
+                          Icons.cloud_download,
+                          color: isLiked ? Colors.blueAccent : Colors.black54,
+                          size: 30,
+                        );
                       },
-                      child: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 30,
-                        color: Colors.black54,
-                      ),
+                      onTap: downloadImage,
                     ),
                   ],
                 ),
