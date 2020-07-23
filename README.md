@@ -20,8 +20,8 @@ All the images are fetched through [Unsplash API](https://unsplash.com/developer
 ## Screens 📱
 
 <p align="center">
-<img src="App Images/homePage.png" height="400"/> <img src="App Images/trendingPage.png" height="400" hspace="100"/> <img src="App Images/searchPage.png" height="400" /> <br><br>
-<img src="App Images/imageAddedToFav.png" height="400" /><img src="App Images/FavImagesPage.png" height="400" hspace="110"/> <img src="App Images/viewLicense.png" height="400" />
+<img src="App Images/homePage.png" height="350"/> <img src="App Images/trendingPage.png" height="350" hspace="100"/> <img src="App Images/searchPage.png" height="350" /> <br><br>
+<img src="App Images/imageAddedToFav.png" height="350" /><img src="App Images/FavImagesPage.png" height="350" hspace="110"/> <img src="App Images/viewLicense.png" height="350" />
 </p>
 
 ## In action 👀
