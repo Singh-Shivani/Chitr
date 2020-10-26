@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-const apiKey = "2Q4I3Kyf2p_KnqoS5_haH0GXolVKEmzEWrabxEp9F7s";
+const apiKey = "API_KEY";
 
 const apiUrl = 'https://api.unsplash.com/photos?client_id=$apiKey';
 
