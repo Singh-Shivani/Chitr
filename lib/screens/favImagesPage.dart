@@ -1,5 +1,6 @@
+import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:flutter/material.dart';
-import 'favImagesFunctionPage.dart';
+import '../helper/favImagesFunctionPage.dart';
 import 'imageView.dart';
 
 class FavouriteImagesPage extends StatefulWidget {
@@ -66,9 +67,8 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              items[index][2], //thumb image
-                              fit: BoxFit.cover,
+                            child: AppNetWorkImage(
+                              imageUrl: items[index][2],
                             ),
                           ),
                         ),

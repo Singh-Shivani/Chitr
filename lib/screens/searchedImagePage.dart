@@ -1,8 +1,11 @@
+import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'networking.dart';
+
+import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import '../api/networking.dart';
 import 'imageView.dart';
-import 'main.dart';
+import '../main.dart';
 
 class SearchedImagePage extends StatefulWidget {
   @override
@@ -54,6 +57,52 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
     });
   }
 
+  Widget buildFloatingSearchBar() {
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+
+    return FloatingSearchBar(
+      hint: 'Search...',
+      scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
+      transitionDuration: const Duration(milliseconds: 800),
+      transitionCurve: Curves.easeInOut,
+      physics: const BouncingScrollPhysics(),
+      axisAlignment: isPortrait ? 0.0 : -1.0,
+      openAxisAlignment: 0.0,
+      maxWidth: isPortrait ? 600 : 500,
+      debounceDelay: const Duration(milliseconds: 500),
+      onQueryChanged: (query) {},
+      transition: CircularFloatingSearchBarTransition(),
+      actions: [
+        FloatingSearchBarAction(
+          showIfOpened: false,
+          child: CircularButton(
+            icon: const Icon(Icons.place),
+            onPressed: () {},
+          ),
+        ),
+        FloatingSearchBarAction.searchToClear(
+          showIfClosed: false,
+        ),
+      ],
+      builder: (context, transition) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Material(
+            color: Colors.white,
+            elevation: 4.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: Colors.accents.map((color) {
+                return Container(height: 112, color: color);
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +124,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
-                    margin: EdgeInsets.only(top: 30),
+                    margin: EdgeInsets.only(top: 16),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
@@ -86,28 +135,18 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                 ),
                 Flexible(
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 30),
-                    margin: EdgeInsets.only(top: 40, bottom: 10),
+                    margin: EdgeInsets.only(top: 30, bottom: 10),
                     child: TextField(
                       controller: _textController,
-                      cursorColor: Color.fromRGBO(13, 26, 59, 1),
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                         suffixIcon: IconButton(
                           onPressed: () => _textController.clear(),
                           icon: Icon(
                             Icons.clear,
                             color: Color.fromRGBO(13, 26, 59, 1),
                           ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          borderSide: BorderSide(
-                              color: Color.fromRGBO(13, 26, 59, 0.8), width: 2),
                         ),
                         hintText: 'Search',
                         hintStyle: TextStyle(letterSpacing: 1),
@@ -126,7 +165,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
           ),
           (searchText == null || searchText.isEmpty)
               ? Expanded(
-                  child: Image.asset('images/undraw_web_search_eetr.png'),
+                  child: Text("Search Here"),
                 )
               : Expanded(
                   child: Padding(
@@ -167,13 +206,8 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                               },
                               child: Hero(
                                 tag: items[index],
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    items[index][2], //thumb image
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                                child:
+                                    AppNetWorkImage(imageUrl: items[index][2]),
                               ),
                             );
                           }

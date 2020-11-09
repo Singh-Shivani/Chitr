@@ -1,21 +1,23 @@
+import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'networking.dart';
+import '../api/networking.dart';
 import 'imageView.dart';
 
-class TrendingWallpaperPage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _TrendingWallpaperPageState createState() => _TrendingWallpaperPageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
+class _HomePageState extends State<HomePage> {
   int pageNumber = 1;
   List items = [];
 
   ScrollController _scrollController = ScrollController();
 
-  void getTrendingImages(int pageNumber) async {
+  void getLatestImages(int pageNumber) async {
     try {
-      var data = await FetchImages().getTrendingImages(pageNumber);
+      var data = await FetchImages().getLatestImages(pageNumber);
       setState(() {
         items = data;
       });
@@ -39,7 +41,7 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
   @override
   void initState() {
     super.initState();
-    getTrendingImages(pageNumber);
+    getLatestImages(pageNumber);
     _scrollController.addListener(() {
       if (_scrollController.offset >=
               _scrollController.position.maxScrollExtent &&
@@ -52,9 +54,8 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        margin: EdgeInsets.only(top: 20),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -63,8 +64,8 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 0.6,
                     crossAxisCount: 2,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
                   ),
                   itemCount: items.length + 1,
                   shrinkWrap: true,
@@ -80,26 +81,19 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
                       );
                     } else {
                       return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ImageView(items: items[index]),
-                            ),
-                          );
-                        },
-                        child: Hero(
-                          tag: items[index],
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              items[index][2], //thumb image
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      );
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ImageView(items: items[index]),
+                              ),
+                            );
+                          },
+                          child: Hero(
+                            tag: items[index],
+                            child: AppNetWorkImage(imageUrl: items[index][2]),
+                          ));
                     }
                   }),
             ),

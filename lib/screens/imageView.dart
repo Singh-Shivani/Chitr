@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:like_button/like_button.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'favImagesFunctionPage.dart';
+import '../helper/favImagesFunctionPage.dart';
 import 'package:image_downloader/image_downloader.dart';
 
 class ImageView extends StatelessWidget {

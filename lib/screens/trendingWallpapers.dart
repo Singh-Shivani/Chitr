@@ -1,22 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'networking.dart';
+import '../api/networking.dart';
 import 'imageView.dart';
 
-class HomePage extends StatefulWidget {
+class TrendingWallpaperPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _TrendingWallpaperPageState createState() => _TrendingWallpaperPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
   int pageNumber = 1;
   List items = [];
 
   ScrollController _scrollController = ScrollController();
 
-  void getLatestImages(int pageNumber) async {
+  void getTrendingImages(int pageNumber) async {
     try {
-      var data = await FetchImages().getLatestImages(pageNumber);
+      var data = await FetchImages().getTrendingImages(pageNumber);
       setState(() {
         items = data;
       });
@@ -40,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    getLatestImages(pageNumber);
+    getTrendingImages(pageNumber);
     _scrollController.addListener(() {
       if (_scrollController.offset >=
               _scrollController.position.maxScrollExtent &&
@@ -53,8 +52,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        margin: EdgeInsets.only(top: 20),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -63,8 +63,8 @@ class _HomePageState extends State<HomePage> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 0.6,
                     crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
                   ),
                   itemCount: items.length + 1,
                   shrinkWrap: true,
