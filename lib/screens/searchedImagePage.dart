@@ -109,7 +109,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.all(8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -124,7 +124,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
-                    margin: EdgeInsets.only(top: 16),
+                    margin: EdgeInsets.only(top: 19),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
@@ -206,8 +206,10 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                               },
                               child: Hero(
                                 tag: items[index],
-                                child:
-                                    AppNetWorkImage(imageUrl: items[index][2]),
+                                child: AppNetWorkImage(
+                                  imageUrl: items[index][2],
+                                  blur_hash: items[index][1],
+                                ),
                               ),
                             );
                           }

@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gradient_text/gradient_text.dart';
 import 'package:like_button/like_button.dart';
 import 'package:overlay_support/overlay_support.dart';
 import '../helper/favImagesFunctionPage.dart';
@@ -77,68 +79,83 @@ class ImageView extends StatelessWidget {
     return Scaffold(
       body: Hero(
         tag: items,
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(
-                items[1],
+        child: CachedNetworkImage(
+          imageUrl: items[2], //items[index][1]
+          imageBuilder: (context, imageProvider) => Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.contain,
               ),
-              fit: BoxFit.cover,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(20),
+                          topLeft: Radius.circular(20)),
+                      color: Colors.white70.withOpacity(0.6)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          size: 30,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      LikeButton(
+                        likeBuilder: (bool isLiked) {
+                          return Icon(
+                            Icons.favorite,
+                            color: isLiked
+                                ? Color.fromRGBO(245, 7, 59, 1)
+                                : Colors.black54,
+                            size: 30,
+                          );
+                        },
+                        onTap: addToFav,
+                      ),
+                      LikeButton(
+                        likeBuilder: (bool isLiked) {
+                          return Icon(
+                            Icons.cloud_download,
+                            color: isLiked ? Colors.blueAccent : Colors.black54,
+                            size: 30,
+                          );
+                        },
+                        onTap: downloadImage,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Container(
-                height: 50,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(20),
-                        topLeft: Radius.circular(20)),
-                    color: Colors.white70.withOpacity(0.6)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        size: 30,
-                        color: Colors.black54,
-                      ),
-                    ),
-                    LikeButton(
-                      likeBuilder: (bool isLiked) {
-                        return Icon(
-                          Icons.favorite,
-                          color: isLiked
-                              ? Color.fromRGBO(245, 7, 59, 1)
-                              : Colors.black54,
-                          size: 30,
-                        );
-                      },
-                      onTap: addToFav,
-                    ),
-                    LikeButton(
-                      likeBuilder: (bool isLiked) {
-                        return Icon(
-                          Icons.cloud_download,
-                          color: isLiked ? Colors.blueAccent : Colors.black54,
-                          size: 30,
-                        );
-                      },
-                      onTap: downloadImage,
-                    ),
-                  ],
+          placeholder: (context, url) => Center(
+            child: GradientText("Chitr",
+                gradient: LinearGradient(colors: [
+                  Color.fromRGBO(254, 225, 64, 1),
+                  Color.fromRGBO(245, 87, 108, 1),
+                ]),
+                style: TextStyle(
+                  fontSize: 47,
+                  fontFamily: 'DancingScript',
+                  letterSpacing: 1,
                 ),
-              ),
-            ],
+                textAlign: TextAlign.center),
           ),
+          errorWidget: (context, url, error) => Icon(Icons.error),
         ),
       ),
     );

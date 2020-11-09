@@ -21,13 +21,23 @@ class FetchImages {
           //to only select portraits images in the list
           List listData = [];
           listData.add(i['id']);
+          listData.add(i['blur_hash']);
           listData.add(i['urls']['regular']);
           listData.add(i['urls']['thumb']);
           listData.add(i['links']['download']);
-
           responseData.add(listData);
         }
       }
+      // for (var i in data) {
+      //   //to only select portraits images in the list
+      //   List listData = [];
+      //   listData.add(i['id']);
+      //   listData.add(i['blur_hash']);
+      //   listData.add(i['urls']['regular']);
+      //   listData.add(i['urls']['thumb']);
+      //   listData.add(i['links']['download']);
+      //   responseData.add(listData);
+      // }
     } else {
       print(response.statusCode);
     }
@@ -49,6 +59,7 @@ class FetchImages {
           //to only select portraits images in the list
           List listData = [];
           listData.add(i['id']);
+          listData.add(i['blur_hash']);
           listData.add(i['urls']['regular']);
           listData.add(i['urls']['thumb']);
           listData.add(i['links']['download']);
@@ -77,6 +88,7 @@ class FetchImages {
           //to only select portraits images in the list
           List listData = [];
           listData.add(i['id']);
+          listData.add(i['blur_hash']);
           listData.add(i['urls']['regular']);
           listData.add(i['urls']['thumb']);
           listData.add(i['links']['download']);

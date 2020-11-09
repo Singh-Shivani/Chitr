@@ -1,4 +1,5 @@
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../api/networking.dart';
@@ -56,49 +57,45 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: GridView.builder(
-                  controller: _scrollController,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 0.6,
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
+        child: GridView.builder(
+            controller: _scrollController,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 0.6,
+              crossAxisCount: 2,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+            ),
+            itemCount: items.length + 1,
+            shrinkWrap: true,
+            physics: ScrollPhysics(),
+            itemBuilder: (context, index) {
+              if (index == items.length) {
+                return Center(
+                  child: SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: CircularProgressIndicator(),
                   ),
-                  itemCount: items.length + 1,
-                  shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    if (index == items.length) {
-                      return Center(
-                        child: SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: CircularProgressIndicator(),
+                );
+              } else {
+                return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ImageView(items: items[index]),
                         ),
                       );
-                    } else {
-                      return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ImageView(items: items[index]),
-                              ),
-                            );
-                          },
-                          child: Hero(
-                            tag: items[index],
-                            child: AppNetWorkImage(imageUrl: items[index][2]),
-                          ));
-                    }
-                  }),
-            ),
-          ],
-        ),
+                    },
+                    child: Hero(
+                      tag: items[index],
+                      child: AppNetWorkImage(
+                        imageUrl: items[index][2],
+                        blur_hash: items[index][1],
+                      ),
+                    ));
+              }
+            }),
       ),
     );
   }

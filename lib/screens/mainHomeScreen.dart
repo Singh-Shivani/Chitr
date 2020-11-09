@@ -22,6 +22,8 @@ class _MainHomePageState extends State<MainHomePage> {
     return Scaffold(
       // extendBody: true,
       appBar: AppBar(
+        // leading: ,
+        centerTitle: true,
         elevation: 0.0,
         title: Text("Chitr"),
         actions: [

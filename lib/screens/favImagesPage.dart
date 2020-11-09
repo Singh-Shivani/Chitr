@@ -69,6 +69,7 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
                             borderRadius: BorderRadius.circular(10),
                             child: AppNetWorkImage(
                               imageUrl: items[index][2],
+                              blur_hash: items[index][1],
                             ),
                           ),
                         ),

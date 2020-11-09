@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gradient_text/gradient_text.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 
 class AppNetWorkImage extends StatelessWidget {
   final String imageUrl;
-  const AppNetWorkImage({Key key, this.imageUrl}) : super(key: key);
+  final String blur_hash;
+  const AppNetWorkImage(
+      {Key key, @required this.imageUrl, @required this.blur_hash})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +21,7 @@ class AppNetWorkImage extends StatelessWidget {
           ),
         ),
       ),
-      placeholder: (context, url) => Center(
-        child: GradientText("Chitr",
-            gradient: LinearGradient(colors: [
-              Color.fromRGBO(254, 225, 64, 1),
-              Color.fromRGBO(245, 87, 108, 1),
-            ]),
-            style: TextStyle(
-              fontSize: 47,
-              fontFamily: 'DancingScript',
-              letterSpacing: 1,
-            ),
-            textAlign: TextAlign.center),
-      ),
+      placeholder: (context, url) => BlurHash(hash: blur_hash),
       errorWidget: (context, url, error) => Icon(Icons.error),
     );
   }

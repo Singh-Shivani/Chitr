@@ -1,3 +1,4 @@
+import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:flutter/material.dart';
 import '../api/networking.dart';
 import 'imageView.dart';
@@ -54,7 +55,7 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
     return Scaffold(
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
-        margin: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.only(top: 8),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -91,12 +92,9 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
                         },
                         child: Hero(
                           tag: items[index],
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              items[index][2], //thumb image
-                              fit: BoxFit.cover,
-                            ),
+                          child: AppNetWorkImage(
+                            imageUrl: items[index][2],
+                            blur_hash: items[index][1],
                           ),
                         ),
                       );
