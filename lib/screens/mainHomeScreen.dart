@@ -11,12 +11,39 @@ class MainHomePage extends StatefulWidget {
 
 class _MainHomePageState extends State<MainHomePage> {
   int _selectedIndex = 0;
-
+  PageController pageController;
   final List<Widget> _children = [
     HomePage(),
     TrendingWallpaperPage(),
     FavouriteImagesPage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  onPageChanged(int pageIndex) {
+    setState(() {
+      this._selectedIndex = pageIndex;
+    });
+  }
+
+  onTap(int pageIndex) {
+    pageController.animateToPage(
+      pageIndex,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +76,14 @@ class _MainHomePageState extends State<MainHomePage> {
               }),
         ],
       ),
-      body: _children[_selectedIndex],
+      body: PageView(
+        children: <Widget>[
+          ..._children,
+        ],
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        physics: NeverScrollableScrollPhysics(),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -66,12 +100,8 @@ class _MainHomePageState extends State<MainHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        // selectedItemColor: Colors.amber[800],
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
+        selectedItemColor: Colors.amber[800],
+        onTap: onTap,
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
+
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../api/networking.dart';
@@ -11,7 +11,9 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin<HomePage> {
+  bool get wantKeepAlive => true;
   int pageNumber = 1;
   List<UnPlashResponse> unPlashResponse = [];
   ScrollController _scrollController = ScrollController();
@@ -56,7 +58,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: EdgeInsets.only(top: 10, left: 10, right: 10),
         child: GridView.builder(
             controller: _scrollController,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

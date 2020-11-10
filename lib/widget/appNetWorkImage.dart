@@ -21,8 +21,14 @@ class AppNetWorkImage extends StatelessWidget {
           ),
         ),
       ),
-      placeholder: (context, url) => BlurHash(hash: blur_hash),
+      placeholder: (context, url) => BlurHash(
+        hash: blur_hash != null ? blur_hash : "LBAdAqof00WCqZj[PDay0.WB}pof",
+      ),
       errorWidget: (context, url, error) => Icon(Icons.error),
     );
+    // return BlurHash(
+    //     hash: blur_hash != null ? blur_hash : "LBAdAqof00WCqZj[PDay0.WB}pof",
+    //     image: imageUrl,
+    //     imageFit: BoxFit.cover);
   }
 }

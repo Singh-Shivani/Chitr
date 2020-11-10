@@ -1,9 +1,9 @@
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
+
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import '../api/networking.dart';
 import 'imageView.dart';
 import '../main.dart';

@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chitrwallpaperapp/database/dataBaseHelper/database_helper.dart';
+import 'package:chitrwallpaperapp/database/data_modal/favImage.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_text/gradient_text.dart';
-import 'package:like_button/like_button.dart';
 import 'package:overlay_support/overlay_support.dart';
-import '../helper/favImagesFunctionPage.dart';
+
 import 'package:image_downloader/image_downloader.dart';
 
 class ImageView extends StatelessWidget {
@@ -14,18 +15,19 @@ class ImageView extends StatelessWidget {
   bool existence;
 
   ImageView({this.unPlashResponse});
-  Future<bool> downloadImage(bool isLiked) async {
+
+  final dbHelper = FavImageDatabaseHelper.instance;
+
+  Future<bool> downloadImage(String imageUrl) async {
     try {
       // Saved with this method.
       var imageId = await ImageDownloader.downloadImage(
-        unPlashResponse.urls.full,
+        imageUrl,
         destination: AndroidDestinationType.directoryPictures,
       );
       if (imageId == null) {
         print(null);
-        return !isLiked;
       }
-
       // Below is a method of obtaining saved image information.
       var fileName = await ImageDownloader.findName(imageId);
       var path = await ImageDownloader.findPath(imageId);
@@ -49,31 +51,76 @@ class ImageView extends StatelessWidget {
       }, duration: Duration(milliseconds: 3000));
       print(error);
     }
+  }
 
+  Future<bool> addToFav(bool isLiked) async {
+    // existence = FavImages().addFavImages(unPlashResponse);
+    final hasData = await dbHelper.hasData(unPlashResponse.id.toString());
+
+    if (hasData == true) {
+      showOverlayNotification((context) {
+        return CustomNotificationOnPage(
+          icon: Icons.favorite,
+          iconColor: Colors.black,
+          subTitle: 'This image is already in your Favourites.',
+        );
+      }, duration: Duration(milliseconds: 3000));
+    } else {
+      FavImage favImage = new FavImage(
+          unPlashResponse.id.toString(),
+          unPlashResponse.urls.thumb,
+          unPlashResponse.urls.full,
+          unPlashResponse.urls.full);
+      showOverlayNotification((context) {
+        return CustomNotificationOnPage(
+          icon: Icons.favorite,
+          iconColor: Color.fromRGBO(245, 7, 59, 1),
+          subTitle: 'Image added in your Favourites.',
+        );
+      }, duration: Duration(milliseconds: 3000));
+    }
     return !isLiked;
   }
 
-  // Future<bool> addToFav(bool isLiked) async {
-  //   existence = FavImages().addFavImages(unPlashResponse);
-  //   if (existence == true) {
-  //     showOverlayNotification((context) {
-  //       return CustomNotificationOnPage(
-  //         icon: Icons.favorite,
-  //         iconColor: Colors.black,
-  //         subTitle: 'This image is already in your Favourites.',
-  //       );
-  //     }, duration: Duration(milliseconds: 3000));
-  //   } else {
-  //     showOverlayNotification((context) {
-  //       return CustomNotificationOnPage(
-  //         icon: Icons.favorite,
-  //         iconColor: Color.fromRGBO(245, 7, 59, 1),
-  //         subTitle: 'Image added in your Favourites.',
-  //       );
-  //     }, duration: Duration(milliseconds: 3000));
-  //   }
-  //   return !isLiked;
-  // }
+  selectImage(parentContext) {
+    return showDialog(
+      context: parentContext,
+      builder: (context) {
+        return SimpleDialog(
+          title: Text("Download Image"),
+          children: <Widget>[
+            SimpleDialogOption(
+                child: Text("Small"),
+                onPressed: () {
+                  downloadImage(unPlashResponse.urls.small);
+                }),
+            SimpleDialogOption(
+                child: Text("Regular"),
+                onPressed: () {
+                  downloadImage(unPlashResponse.urls.regular);
+                }),
+            SimpleDialogOption(
+                child: Text("Full"),
+                onPressed: () {
+                  downloadImage(unPlashResponse.urls.full);
+                }),
+            SimpleDialogOption(
+                child: Text("Raw"),
+                onPressed: () {
+                  downloadImage(unPlashResponse.urls.raw);
+                }),
+            SimpleDialogOption(
+              child: Text(
+                "Cancel",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,60 +136,8 @@ class ImageView extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: imageProvider,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.cover,
                 ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(20),
-                            topLeft: Radius.circular(20)),
-                        color: Colors.white70.withOpacity(0.6)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(
-                            Icons.arrow_back_ios,
-                            size: 30,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        LikeButton(
-                          likeBuilder: (bool isLiked) {
-                            return Icon(
-                              Icons.favorite,
-                              color: isLiked
-                                  ? Color.fromRGBO(245, 7, 59, 1)
-                                  : Colors.black54,
-                              size: 30,
-                            );
-                          },
-                          // onTap: addToFav,
-                        ),
-                        LikeButton(
-                          likeBuilder: (bool isLiked) {
-                            return Icon(
-                              Icons.cloud_download,
-                              color:
-                                  isLiked ? Colors.blueAccent : Colors.black54,
-                              size: 30,
-                            );
-                          },
-                          onTap: downloadImage,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
               ),
             ),
             placeholder: (context, url) => Center(
@@ -161,6 +156,12 @@ class ImageView extends StatelessWidget {
             errorWidget: (context, url, error) => Icon(Icons.error),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          selectImage(context);
+        },
+        child: Icon(Icons.download_sharp),
       ),
     );
   }

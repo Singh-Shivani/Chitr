@@ -9,7 +9,9 @@ class TrendingWallpaperPage extends StatefulWidget {
   _TrendingWallpaperPageState createState() => _TrendingWallpaperPageState();
 }
 
-class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
+class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
+    with AutomaticKeepAliveClientMixin<TrendingWallpaperPage> {
+  bool get wantKeepAlive => true;
   int pageNumber = 1;
   List<UnPlashResponse> unPlashResponse = [];
 
