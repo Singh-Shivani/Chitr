@@ -20,9 +20,19 @@ class _MainHomePageState extends State<MainHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // extendBody: true,
       appBar: AppBar(
-        // leading: ,
+        leading: IconButton(
+            icon: Icon(
+              Icons.info_outline,
+            ),
+            onPressed: () {
+              showAboutDialog(
+                context: context,
+                applicationName: 'Chitr',
+                applicationVersion: 'by Shivani Singh\n\nV1.0',
+                applicationLegalese: 'All images are provided by unsplash.com',
+              );
+            }),
         centerTitle: true,
         elevation: 0.0,
         title: Text("Chitr"),
@@ -40,7 +50,6 @@ class _MainHomePageState extends State<MainHomePage> {
         ],
       ),
       body: _children[_selectedIndex],
-
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

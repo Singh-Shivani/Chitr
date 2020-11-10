@@ -1,3 +1,4 @@
+import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,15 +13,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int pageNumber = 1;
-  List items = [];
-
+  List<UnPlashResponse> unPlashResponse = [];
   ScrollController _scrollController = ScrollController();
 
   void getLatestImages(int pageNumber) async {
     try {
       var data = await FetchImages().getLatestImages(pageNumber);
       setState(() {
-        items = data;
+        unPlashResponse = data;
       });
     } catch (e) {
       print(e);
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
       pageNumber = pageNumber + 1;
       var data = await FetchImages().getLatestImages(pageNumber);
       setState(() {
-        items.addAll(data);
+        unPlashResponse.addAll(data);
       });
     } catch (e) {
       print(e);
@@ -65,11 +65,11 @@ class _HomePageState extends State<HomePage> {
               mainAxisSpacing: 8,
               crossAxisSpacing: 8,
             ),
-            itemCount: items.length + 1,
+            itemCount: unPlashResponse.length + 1,
             shrinkWrap: true,
             physics: ScrollPhysics(),
             itemBuilder: (context, index) {
-              if (index == items.length) {
+              if (index == unPlashResponse.length) {
                 return Center(
                   child: SizedBox(
                     width: 30,
@@ -78,20 +78,22 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               } else {
+                UnPlashResponse item = unPlashResponse[index];
                 return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ImageView(items: items[index]),
+                          builder: (context) => ImageView(
+                              unPlashResponse: unPlashResponse[index]),
                         ),
                       );
                     },
                     child: Hero(
-                      tag: items[index],
+                      tag: item.id,
                       child: AppNetWorkImage(
-                        imageUrl: items[index][2],
-                        blur_hash: items[index][1],
+                        imageUrl: item.urls.thumb,
+                        blur_hash: item.blurHash,
                       ),
                     ));
               }

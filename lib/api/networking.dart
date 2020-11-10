@@ -1,3 +1,4 @@
+import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -11,37 +12,21 @@ class FetchImages {
         '$apiUrl&order_by=latest&orientation=portrait&&per_page=15&page=$pageNumber';
     http.Response response = await http.get(url);
 
-    List responseData = [];
-
+    List<UnPlashResponse> unPlashResponseList = [];
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-
-      for (var i in data) {
-        if (i['height'] > i['width']) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i]['height'] > data[i]['width']) {
           //to only select portraits images in the list
-          List listData = [];
-          listData.add(i['id']);
-          listData.add(i['blur_hash']);
-          listData.add(i['urls']['regular']);
-          listData.add(i['urls']['thumb']);
-          listData.add(i['links']['download']);
-          responseData.add(listData);
+          UnPlashResponse unPlashResponse =
+              new UnPlashResponse.fromJson(data[i]);
+          unPlashResponseList.add(unPlashResponse);
         }
       }
-      // for (var i in data) {
-      //   //to only select portraits images in the list
-      //   List listData = [];
-      //   listData.add(i['id']);
-      //   listData.add(i['blur_hash']);
-      //   listData.add(i['urls']['regular']);
-      //   listData.add(i['urls']['thumb']);
-      //   listData.add(i['links']['download']);
-      //   responseData.add(listData);
-      // }
     } else {
       print(response.statusCode);
     }
-    return responseData;
+    return unPlashResponseList;
   }
 
   Future getTrendingImages(int pageNumber) async {
@@ -49,27 +34,21 @@ class FetchImages {
         '$apiUrl&order_by=popular&orientation=portrait&&per_page=15&page=$pageNumber';
     http.Response response = await http.get(url);
 
-    List responseData = [];
-
+    List<UnPlashResponse> unPlashResponseList = [];
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-
-      for (var i in data) {
-        if (i['height'] > i['width']) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i]['height'] > data[i]['width']) {
           //to only select portraits images in the list
-          List listData = [];
-          listData.add(i['id']);
-          listData.add(i['blur_hash']);
-          listData.add(i['urls']['regular']);
-          listData.add(i['urls']['thumb']);
-          listData.add(i['links']['download']);
-          responseData.add(listData);
+          UnPlashResponse unPlashResponse =
+              new UnPlashResponse.fromJson(data[i]);
+          unPlashResponseList.add(unPlashResponse);
         }
       }
     } else {
       print(response.statusCode);
     }
-    return responseData;
+    return unPlashResponseList;
   }
 
   Future getSearchedImages(int pageNumber, String query) async {
@@ -77,28 +56,21 @@ class FetchImages {
         'https://api.unsplash.com/search/photos?client_id=$apiKey&query=$query&orientation=portrait&page=$pageNumber';
     http.Response response = await http.get(url);
 
-    List responseData = [];
-
+    List<UnPlashResponse> unPlashResponseList = [];
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print(data);
 
-      for (var i in data['results']) {
-        if (i['height'] > i['width']) {
+      for (var i = 0; i < data.length; i++) {
+        if (data['results'][i]['height'] > data['results'][i]['width']) {
           //to only select portraits images in the list
-          List listData = [];
-          listData.add(i['id']);
-          listData.add(i['blur_hash']);
-          listData.add(i['urls']['regular']);
-          listData.add(i['urls']['thumb']);
-          listData.add(i['links']['download']);
-          responseData.add(listData);
-        } else {
-          print(response.statusCode);
+          UnPlashResponse unPlashResponse =
+              new UnPlashResponse.fromJson(data['results'][i]);
+          unPlashResponseList.add(unPlashResponse);
         }
       }
+    } else {
+      print(response.statusCode);
     }
-
-    return responseData;
+    return unPlashResponseList;
   }
 }

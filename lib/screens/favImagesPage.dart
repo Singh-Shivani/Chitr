@@ -51,13 +51,13 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ImageView(items: items[index]),
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) =>
+                          //         ImageView(),
+                          //   ),
+                          // );
                         },
                         child: GestureDetector(
                           onLongPress: () {

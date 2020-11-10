@@ -1,12 +1,3 @@
-import 'dart:convert';
-
-// List<UnPlashResponse> unPlashResponseFromJson(String str) =>
-//     List<UnPlashResponse>.from(
-//         json.decode(str).map((x) => UnPlashResponse.fromJson(x)));
-
-// String unPlashResponseToJson(List<UnPlashResponse> data) =>
-//     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 class UnPlashResponse {
   UnPlashResponse({
     this.id,

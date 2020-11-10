@@ -1,3 +1,4 @@
+import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:flutter/material.dart';
 import '../api/networking.dart';
@@ -10,7 +11,7 @@ class TrendingWallpaperPage extends StatefulWidget {
 
 class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
   int pageNumber = 1;
-  List items = [];
+  List<UnPlashResponse> unPlashResponse = [];
 
   ScrollController _scrollController = ScrollController();
 
@@ -18,7 +19,7 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
     try {
       var data = await FetchImages().getTrendingImages(pageNumber);
       setState(() {
-        items = data;
+        unPlashResponse = data;
       });
     } catch (e) {
       print(e);
@@ -30,7 +31,7 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
       pageNumber = pageNumber + 1;
       var data = await FetchImages().getLatestImages(pageNumber);
       setState(() {
-        items.addAll(data);
+        unPlashResponse.addAll(data);
       });
     } catch (e) {
       print(e);
@@ -67,11 +68,11 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
                     mainAxisSpacing: 12,
                     crossAxisSpacing: 12,
                   ),
-                  itemCount: items.length + 1,
+                  itemCount: unPlashResponse.length + 1,
                   shrinkWrap: true,
                   physics: ScrollPhysics(),
                   itemBuilder: (context, index) {
-                    if (index == items.length) {
+                    if (index == unPlashResponse.length) {
                       return Center(
                         child: SizedBox(
                           width: 30,
@@ -80,21 +81,22 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage> {
                         ),
                       );
                     } else {
+                      UnPlashResponse item = unPlashResponse[index];
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  ImageView(items: items[index]),
+                              builder: (context) => ImageView(
+                                  unPlashResponse: unPlashResponse[index]),
                             ),
                           );
                         },
                         child: Hero(
-                          tag: items[index],
+                          tag: item.id,
                           child: AppNetWorkImage(
-                            imageUrl: items[index][2],
-                            blur_hash: items[index][1],
+                            imageUrl: item.urls.thumb,
+                            blur_hash: item.blurHash,
                           ),
                         ),
                       );

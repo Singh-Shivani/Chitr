@@ -1,3 +1,4 @@
+import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class SearchedImagePage extends StatefulWidget {
 class _SearchedImagePageState extends State<SearchedImagePage> {
   String searchText;
   int pageNumber = 1;
-  List items;
+  List<UnPlashResponse> unPlashResponse = [];
   var _textController = TextEditingController();
 
   ScrollController _scrollController = ScrollController();
@@ -24,7 +25,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
     try {
       var data = await FetchImages().getSearchedImages(pageNumber, query);
       setState(() {
-        items = data;
+        unPlashResponse = data;
       });
     } catch (e) {
       print(e);
@@ -36,7 +37,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
       pageNumber = pageNumber + 1;
       var data = await FetchImages().getSearchedImages(pageNumber, query);
       setState(() {
-        items.addAll(data);
+        unPlashResponse.addAll(data);
       });
     } catch (e) {
       print(e);
@@ -55,52 +56,6 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
         loadMoreImages(searchText);
       }
     });
-  }
-
-  Widget buildFloatingSearchBar() {
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
-
-    return FloatingSearchBar(
-      hint: 'Search...',
-      scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
-      transitionDuration: const Duration(milliseconds: 800),
-      transitionCurve: Curves.easeInOut,
-      physics: const BouncingScrollPhysics(),
-      axisAlignment: isPortrait ? 0.0 : -1.0,
-      openAxisAlignment: 0.0,
-      maxWidth: isPortrait ? 600 : 500,
-      debounceDelay: const Duration(milliseconds: 500),
-      onQueryChanged: (query) {},
-      transition: CircularFloatingSearchBarTransition(),
-      actions: [
-        FloatingSearchBarAction(
-          showIfOpened: false,
-          child: CircularButton(
-            icon: const Icon(Icons.place),
-            onPressed: () {},
-          ),
-        ),
-        FloatingSearchBarAction.searchToClear(
-          showIfClosed: false,
-        ),
-      ],
-      builder: (context, transition) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Material(
-            color: Colors.white,
-            elevation: 4.0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: Colors.accents.map((color) {
-                return Container(height: 112, color: color);
-              }).toList(),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -181,11 +136,11 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                           mainAxisSpacing: 12,
                           crossAxisSpacing: 12,
                         ),
-                        itemCount: items.length + 1,
+                        itemCount: unPlashResponse.length + 1,
                         shrinkWrap: true,
                         physics: ScrollPhysics(),
                         itemBuilder: (context, index) {
-                          if (index == items.length) {
+                          if (index == unPlashResponse.length) {
                             return Center(
                               child: SizedBox(
                                 width: 30,
@@ -194,21 +149,23 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                               ),
                             );
                           } else {
+                            UnPlashResponse item = unPlashResponse[index];
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        ImageView(items: items[index]),
+                                    builder: (context) => ImageView(
+                                        unPlashResponse:
+                                            unPlashResponse[index]),
                                   ),
                                 );
                               },
                               child: Hero(
-                                tag: items[index],
+                                tag: item.id,
                                 child: AppNetWorkImage(
-                                  imageUrl: items[index][2],
-                                  blur_hash: items[index][1],
+                                  imageUrl: item.urls.thumb,
+                                  blur_hash: item.blurHash,
                                 ),
                               ),
                             );
