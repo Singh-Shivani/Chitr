@@ -92,7 +92,7 @@ class _MainHomePageState extends State<MainHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.whatshot),
-            label: 'Trnading',
+            label: 'Trending ',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.thumb_up),

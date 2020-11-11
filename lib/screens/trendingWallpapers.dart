@@ -72,7 +72,7 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
                   ),
                   itemCount: unPlashResponse.length + 1,
                   shrinkWrap: true,
-                  physics: ScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
                     if (index == unPlashResponse.length) {
                       return Center(
@@ -99,6 +99,7 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
                           child: AppNetWorkImage(
                             imageUrl: item.urls.thumb,
                             blur_hash: item.blurHash,
+                            userName: item.user.name,
                           ),
                         ),
                       );

@@ -11,9 +11,12 @@ class FavImageDatabaseHelper {
   static final table = 'fav_images';
   static final columnId = 'id';
   static final imageid = 'imageid';
-  static final smallImage = 'smallImage';
-  static final fullImage = 'fullImage';
-  static final dwonloadLink = 'dwonloadLink';
+  static final raw = 'raw';
+  static final full = 'full';
+  static final regular = 'regular';
+  static final small = 'small';
+  static final thumb = 'thumb';
+  static final blurHash = 'blurHash';
 
   FavImageDatabaseHelper._privateConstructor();
   static final FavImageDatabaseHelper instance =
@@ -41,9 +44,12 @@ class FavImageDatabaseHelper {
           CREATE TABLE $table (
             $columnId INTEGER PRIMARY KEY,
             $imageid TEXT NOT NULL,
-            $smallImage TEXT NOT NULL,
-            $fullImage TEXT NOT NULL,
-            $dwonloadLink TEXT NOT NULL
+            $raw TEXT NOT NULL,
+            $full TEXT NOT NULL,
+            $regular TEXT NOT NULL,
+            $small TEXT NOT NULL,
+            $thumb TEXT NOT NULL,
+            $blurHash TEXT NOT NULL
           )
           ''');
   }
@@ -113,8 +119,8 @@ class FavImageDatabaseHelper {
     return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
 
-  Future<int> deleteFav(int id) async {
+  Future<int> deleteFav(String id) async {
     Database db = await instance.database;
-    return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+    return await db.delete(table, where: '$imageid = ?', whereArgs: [id]);
   }
 }

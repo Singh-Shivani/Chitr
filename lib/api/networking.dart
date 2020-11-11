@@ -9,7 +9,7 @@ const apiUrl = 'https://api.unsplash.com/photos?client_id=$apiKey';
 class FetchImages {
   Future getLatestImages(int pageNumber) async {
     String url =
-        '$apiUrl&order_by=latest&orientation=portrait&&per_page=15&page=$pageNumber';
+        '$apiUrl&order_by=latest&orientation=portrait&&per_page=15&per_page=20&page=$pageNumber';
     http.Response response = await http.get(url);
 
     List<UnPlashResponse> unPlashResponseList = [];
@@ -53,7 +53,7 @@ class FetchImages {
 
   Future getSearchedImages(int pageNumber, String query) async {
     String url =
-        'https://api.unsplash.com/search/photos?client_id=$apiKey&query=$query&orientation=portrait&page=$pageNumber';
+        'https://api.unsplash.com/search/photos?client_id=$apiKey&per_page=20&query=$query&orientation=portrait&page=$pageNumber';
     http.Response response = await http.get(url);
 
     List<UnPlashResponse> unPlashResponseList = [];
@@ -61,12 +61,12 @@ class FetchImages {
       var data = jsonDecode(response.body);
 
       for (var i = 0; i < data.length; i++) {
-        if (data['results'][i]['height'] > data['results'][i]['width']) {
-          //to only select portraits images in the list
-          UnPlashResponse unPlashResponse =
-              new UnPlashResponse.fromJson(data['results'][i]);
-          unPlashResponseList.add(unPlashResponse);
-        }
+        // if (data['results'][i]['height'] > data['results'][i]['width']) {
+        //to only select portraits images in the list
+        UnPlashResponse unPlashResponse =
+            new UnPlashResponse.fromJson(data['results'][i]);
+        unPlashResponseList.add(unPlashResponse);
+        // }
       }
     } else {
       print(response.statusCode);

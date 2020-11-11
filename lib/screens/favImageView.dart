@@ -8,14 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:overlay_support/overlay_support.dart';
+
 import 'package:image_downloader/image_downloader.dart';
 import 'package:provider/provider.dart';
 
-class ImageView extends StatelessWidget {
-  final UnPlashResponse unPlashResponse;
+class FavImageView extends StatelessWidget {
+  final FavImage favImage;
   bool existence;
 
-  ImageView({this.unPlashResponse});
+  FavImageView({this.favImage});
 
   final dbHelper = FavImageDatabaseHelper.instance;
 
@@ -56,7 +57,7 @@ class ImageView extends StatelessWidget {
 
   Future<bool> addToFav(bool isLiked) async {
     // existence = FavImages().addFavImages(unPlashResponse);
-    final hasData = await dbHelper.hasData(unPlashResponse.id.toString());
+    final hasData = await dbHelper.hasData(favImage.imageid.toString());
 
     if (hasData == true) {
       showOverlayNotification((context) {
@@ -88,51 +89,42 @@ class ImageView extends StatelessWidget {
             SimpleDialogOption(
                 child: Text("Small"),
                 onPressed: () {
-                  downloadImage(unPlashResponse.urls.small);
+                  downloadImage(favImage.small);
                   Navigator.pop(context);
                 }),
             SimpleDialogOption(
                 child: Text("Regular"),
                 onPressed: () {
-                  downloadImage(unPlashResponse.urls.regular);
+                  downloadImage(favImage.regular);
                   Navigator.pop(context);
                 }),
             SimpleDialogOption(
                 child: Text("Full"),
                 onPressed: () {
-                  downloadImage(unPlashResponse.urls.full);
+                  downloadImage(favImage.full);
                   Navigator.pop(context);
                 }),
             SimpleDialogOption(
                 child: Text("Raw"),
                 onPressed: () {
-                  downloadImage(unPlashResponse.urls.raw);
+                  downloadImage(favImage.raw);
                   Navigator.pop(context);
                 }),
             Consumer<FavImageProvider>(
                 builder: (context, favImageProvider, child) {
               return SimpleDialogOption(
-                  child: Text("Like Image"),
+                  child: Text("Remove Like Image"),
                   onPressed: () async {
                     final dbHelper = FavImageDatabaseHelper.instance;
                     final hasData =
-                        await dbHelper.hasData(unPlashResponse.id.toString());
-                    if (!hasData) {
-                      FavImage favImage = new FavImage(
-                        unPlashResponse.id.toString(),
-                        unPlashResponse.urls.raw,
-                        unPlashResponse.urls.full,
-                        unPlashResponse.urls.regular,
-                        unPlashResponse.urls.small,
-                        unPlashResponse.urls.thumb,
-                        unPlashResponse.blurHash,
-                      );
-                      favImageProvider.addImageToFav(favImage);
+                        await dbHelper.hasData(favImage.imageid.toString());
+                    if (hasData) {
+                      favImageProvider.removeFavImage(favImage.imageid);
                       showOverlayNotification((context) {
                         return CustomNotificationOnPage(
                           icon: Icons.favorite,
-                          iconColor: Color.fromRGBO(245, 7, 59, 1),
-                          subTitle: 'Image added in your Favourites.',
+                          iconColor: Colors.black,
+                          subTitle: 'Image Removed form your Favourites.',
                         );
                       }, duration: Duration(milliseconds: 3000));
                     } else {
@@ -140,8 +132,7 @@ class ImageView extends StatelessWidget {
                         return CustomNotificationOnPage(
                           icon: Icons.favorite,
                           iconColor: Colors.black,
-                          subTitle:
-                              'Image is already added to your Favourites.',
+                          subTitle: 'Image already Removed form Favourites.',
                         );
                       }, duration: Duration(milliseconds: 3000));
                     }
@@ -167,10 +158,10 @@ class ImageView extends StatelessWidget {
       body: Stack(
         children: [
           Hero(
-            tag: unPlashResponse.id,
+            tag: favImage.imageid,
             child: InteractiveViewer(
               child: CachedNetworkImage(
-                imageUrl: unPlashResponse.urls.small,
+                imageUrl: favImage.thumb,
                 imageBuilder: (context, imageProvider) => Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,

@@ -14,12 +14,21 @@ class FavImageProvider with ChangeNotifier {
     updateProviderData();
   }
 
+  void removeFavImage(imageId) {
+    final dbHelper = FavImageDatabaseHelper.instance;
+    dbHelper.deleteFav(imageId);
+    updateProviderData();
+  }
+
   void addImageToFav(FavImage listItem) {
     Map<String, dynamic> favImageItem = {
       "imageid": listItem.imageid,
-      "smallImage": listItem.smallImage,
-      "fullImage": listItem.fullImage,
-      "dwonloadLink": listItem.dwonloadLink,
+      "raw": listItem.raw,
+      "full": listItem.full,
+      "regular": listItem.regular,
+      "small": listItem.small,
+      "thumb": listItem.thumb,
+      "blurHash": listItem.blurHash
     };
     final dbHelper = FavImageDatabaseHelper.instance;
     dbHelper.insert(favImageItem);
@@ -27,21 +36,22 @@ class FavImageProvider with ChangeNotifier {
   }
 
   Future<void> updateProviderData() async {
+    favImageList.clear();
     final dbHelper = FavImageDatabaseHelper.instance;
     final allRows = await dbHelper.queryAllRows();
-    print('query all rows: PROVIDER');
-    // print(allRows[0]);
     if (allRows.length != 0) {
-      // print(allRows[0]);
       for (int i = 0; i < allRows.length; i++) {
         FavImage favSongMobileData = new FavImage(
             allRows[i]['imageid'],
-            allRows[i]['smallImage'],
-            allRows[i]['fullImage'],
-            allRows[i]['dwonloadLink']);
+            allRows[i]['raw'],
+            allRows[i]['full'],
+            allRows[i]['regular'],
+            allRows[i]['small'],
+            allRows[i]['thumb'],
+            allRows[i]['blurHash']);
         favImageList.add(favSongMobileData);
+        notifyListeners();
       }
-      notifyListeners();
     } else {
       print('query all NO DATA:');
       notifyListeners();
