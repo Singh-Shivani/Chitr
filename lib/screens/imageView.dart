@@ -11,6 +11,7 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:image_downloader/image_downloader.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class ImageView extends StatelessWidget {
   final UnPlashResponse unPlashResponse;
   bool existence;

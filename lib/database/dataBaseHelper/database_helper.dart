@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 
 class FavImageDatabaseHelper {
   static final _databaseName = "chitr.db";
-  static final _databaseVersion = 1;
+  static final _databaseVersion = 2;
 
   static final table = 'fav_images';
   static final columnId = 'id';

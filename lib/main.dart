@@ -1,3 +1,4 @@
+import 'package:chitrwallpaperapp/helper/theme.dart';
 import 'package:chitrwallpaperapp/provider/favImageProvider.dart';
 import 'package:chitrwallpaperapp/screens/mainHomeScreen.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +18,17 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<FavImageProvider>(
               create: (context) => FavImageProvider()),
         ],
-        child: MaterialApp(
-          theme: ThemeData(
-            primarySwatch: Colors.grey,
-            scaffoldBackgroundColor: Colors.white,
+        child: ChangeNotifierProvider(
+          create: (_) => ThemeNotifier(),
+          child: Consumer<ThemeNotifier>(
+            builder: (context, ThemeNotifier notifier, child) {
+              return MaterialApp(
+                title: 'Flutter Theme Provider',
+                theme: notifier.darkTheme ? dark : light,
+                home: MainHomePage(),
+              );
+            },
           ),
-          debugShowCheckedModeBanner: true,
-          home: MainHomePage(),
         ),
       ),
     );

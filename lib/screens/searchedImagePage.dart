@@ -102,7 +102,6 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                             controller: _textController,
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              fillColor: Color(0xfff3f3f4),
                               filled: true,
                               suffixIcon: IconButton(
                                 onPressed: () {

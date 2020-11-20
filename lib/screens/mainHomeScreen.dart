@@ -1,8 +1,10 @@
+import 'package:chitrwallpaperapp/helper/theme.dart';
 import 'package:chitrwallpaperapp/screens/favImagesPage.dart';
 import 'package:chitrwallpaperapp/screens/homePage.dart';
 import 'package:chitrwallpaperapp/screens/searchedImagePage.dart';
 import 'package:chitrwallpaperapp/screens/trendingWallpapers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainHomePage extends StatefulWidget {
   @override
@@ -54,11 +56,22 @@ class _MainHomePageState extends State<MainHomePage> {
             ),
             onPressed: () {
               showAboutDialog(
-                context: context,
-                applicationName: 'Chitr',
-                applicationVersion: 'by Shivani Singh\n\nV1.0',
-                applicationLegalese: 'All images are provided by unsplash.com',
-              );
+                  context: context,
+                  applicationName: 'Chitr',
+                  applicationVersion: 'by Shivani Singh\n\nV1.0',
+                  applicationLegalese:
+                      'All images are provided by unsplash.com',
+                  children: [
+                    Consumer<ThemeNotifier>(
+                      builder: (context, notifier, child) => SwitchListTile(
+                        title: Text("Dark Mode"),
+                        onChanged: (val) {
+                          notifier.toggleTheme();
+                        },
+                        value: notifier.darkTheme,
+                      ),
+                    ),
+                  ]);
             }),
         centerTitle: true,
         elevation: 0.0,
