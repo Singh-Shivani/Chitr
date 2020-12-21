@@ -1,24 +1,27 @@
-import 'package:flutter/cupertino.dart';
+import 'package:chitrwallpaperapp/modal/responeModal.dart';
+import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:flutter/material.dart';
-import 'networking.dart';
+import '../api/networking.dart';
 import 'imageView.dart';
 
-class HomePage extends StatefulWidget {
+class TrendingWallpaperPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _TrendingWallpaperPageState createState() => _TrendingWallpaperPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
+    with AutomaticKeepAliveClientMixin<TrendingWallpaperPage> {
+  bool get wantKeepAlive => true;
   int pageNumber = 1;
-  List items = [];
+  List<UnPlashResponse> unPlashResponse = [];
 
   ScrollController _scrollController = ScrollController();
 
-  void getLatestImages(int pageNumber) async {
+  void getTrendingImages(int pageNumber) async {
     try {
-      var data = await FetchImages().getLatestImages(pageNumber);
+      var data = await FetchImages().getTrendingImages(pageNumber);
       setState(() {
-        items = data;
+        unPlashResponse = data;
       });
     } catch (e) {
       print(e);
@@ -30,7 +33,7 @@ class _HomePageState extends State<HomePage> {
       pageNumber = pageNumber + 1;
       var data = await FetchImages().getLatestImages(pageNumber);
       setState(() {
-        items.addAll(data);
+        unPlashResponse.addAll(data);
       });
     } catch (e) {
       print(e);
@@ -40,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    getLatestImages(pageNumber);
+    getTrendingImages(pageNumber);
     _scrollController.addListener(() {
       if (_scrollController.offset >=
               _scrollController.position.maxScrollExtent &&
@@ -53,8 +56,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        margin: EdgeInsets.only(top: 8),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -63,14 +67,14 @@ class _HomePageState extends State<HomePage> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 0.6,
                     crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
                   ),
-                  itemCount: items.length + 1,
+                  itemCount: unPlashResponse.length + 1,
                   shrinkWrap: true,
-                  physics: ScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    if (index == items.length) {
+                    if (index == unPlashResponse.length) {
                       return Center(
                         child: SizedBox(
                           width: 30,
@@ -79,24 +83,23 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     } else {
+                      UnPlashResponse item = unPlashResponse[index];
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  ImageView(items: items[index]),
+                              builder: (context) => ImageView(
+                                  unPlashResponse: unPlashResponse[index]),
                             ),
                           );
                         },
                         child: Hero(
-                          tag: items[index],
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              items[index][2], //thumb image
-                              fit: BoxFit.cover,
-                            ),
+                          tag: item.id,
+                          child: AppNetWorkImage(
+                            imageUrl: item.urls.thumb,
+                            blur_hash: item.blurHash,
+                            userName: item.user.name,
                           ),
                         ),
                       );
