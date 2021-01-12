@@ -1,9 +1,9 @@
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
-import 'package:chitrwallpaperapp/widget/imageNotFound.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../api/networking.dart';
 import 'imageView.dart';
 import '../main.dart';
@@ -55,6 +55,12 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
         loadMoreImages(searchText);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 
   @override
@@ -134,51 +140,54 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                         left: 10,
                         right: 10,
                       ),
-                      child: GridView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          controller: _scrollController,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 0.6,
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 12,
-                            crossAxisSpacing: 12,
-                          ),
-                          itemCount: unPlashResponse.length + 1,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            if (index == unPlashResponse.length) {
-                              return Center(
-                                child: SizedBox(
-                                  // width: 30,
-                                  // height: 30,
+                      child: StaggeredGridView.countBuilder(
+                        crossAxisCount: 4,
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        controller: _scrollController,
+                        itemCount: unPlashResponse.length + 1,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (index == unPlashResponse.length) {
+                            return Center(
+                              child: Center(
+                                child: Container(
+                                  margin: EdgeInsets.only(top: 24),
+                                  width: 30,
+                                  height: 30,
                                   child: CircularProgressIndicator(),
                                 ),
-                              );
-                            } else {
-                              UnPlashResponse item = unPlashResponse[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ImageView(
-                                          unPlashResponse:
-                                              unPlashResponse[index]),
-                                    ),
-                                  );
-                                },
-                                child: Hero(
-                                  tag: item.id,
-                                  child: AppNetWorkImage(
-                                    imageUrl: item.urls.thumb,
-                                    blur_hash: item.blurHash,
-                                    userName: item.user.name,
+                              ),
+                            );
+                          } else {
+                            UnPlashResponse item = unPlashResponse[index];
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ImageView(
+                                        unPlashResponse:
+                                            unPlashResponse[index]),
                                   ),
+                                );
+                              },
+                              child: Hero(
+                                tag: item.id,
+                                child: AppNetWorkImage(
+                                  blur_hash: item.blurHash,
+                                  height: item.height,
+                                  imageUrl: item.urls.thumb,
+                                  width: item.width,
                                 ),
-                              );
-                            }
-                          }),
+                              ),
+                            );
+                          }
+                        },
+                        staggeredTileBuilder: (int index) =>
+                            new StaggeredTile.fit(2),
+                        mainAxisSpacing: 8.0,
+                        crossAxisSpacing: 8.0,
+                      ),
                     ),
                   ),
           ],

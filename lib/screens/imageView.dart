@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chitrwallpaperapp/database/dataBaseHelper/database_helper.dart';
 import 'package:chitrwallpaperapp/database/data_modal/favImage.dart';
+import 'package:chitrwallpaperapp/modal/downloadOption.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/provider/favImageProvider.dart';
+import 'package:chitrwallpaperapp/widget/cartModaleView.dart';
+import 'package:chitrwallpaperapp/widget/imageViewAppBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,26 +13,31 @@ import 'package:gradient_text/gradient_text.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:image_downloader/image_downloader.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:http/http.dart' as http;
 
-// ignore: must_be_immutable
-class ImageView extends StatelessWidget {
+class ImageView extends StatefulWidget {
   final UnPlashResponse unPlashResponse;
-  bool existence;
 
   ImageView({this.unPlashResponse});
 
-  final dbHelper = FavImageDatabaseHelper.instance;
+  @override
+  _ImageViewState createState() => _ImageViewState();
+}
 
-  Future<bool> downloadImage(String imageUrl) async {
+class _ImageViewState extends State<ImageView> {
+  bool existence;
+  Modal modal = new Modal();
+  final dbHelper = FavImageDatabaseHelper.instance;
+  List<DownloadOption> downloadOptionList = [];
+  downloadImage(String imageUrl) async {
     try {
       // Saved with this method.
       var imageId = await ImageDownloader.downloadImage(
         imageUrl,
         destination: AndroidDestinationType.directoryPictures,
       );
-      if (imageId == null) {
-        print(null);
-      }
+      if (imageId == null) {}
       // Below is a method of obtaining saved image information.
       var fileName = await ImageDownloader.findName(imageId);
       var path = await ImageDownloader.findPath(imageId);
@@ -55,19 +63,54 @@ class ImageView extends StatelessWidget {
     }
   }
 
-  Future<bool> addToFav(bool isLiked) async {
-    // existence = FavImages().addFavImages(unPlashResponse);
-    final hasData = await dbHelper.hasData(unPlashResponse.id.toString());
+  @override
+  void initState() {
+    super.initState();
+    createUrlList();
+  }
 
-    if (hasData == true) {
-      showOverlayNotification((context) {
-        return CustomNotificationOnPage(
-          icon: Icons.favorite,
-          iconColor: Colors.black,
-          subTitle: 'This image is already in your Favourites.',
-        );
-      }, duration: Duration(milliseconds: 3000));
-    } else {
+  createUrlList() async {
+    List urls = [
+      {
+        "type": "Small",
+        "url": widget.unPlashResponse.urls.small,
+      },
+      {
+        "type": "Regular",
+        "url": widget.unPlashResponse.urls.regular,
+      },
+      {
+        "type": "Full",
+        "url": widget.unPlashResponse.urls.full,
+      },
+      {"type": "Raw", "url": widget.unPlashResponse.urls.raw}
+    ];
+
+    for (var i = 0; i < urls.length; i++) {
+      http.Response r = await http.head(urls[i]['url']);
+      DownloadOption downloadOption = new DownloadOption(
+          urls[i]['url'], urls[i]['type'], r.headers["content-length"]);
+      setState(() {
+        downloadOptionList.add(downloadOption);
+      });
+    }
+  }
+
+  Future<void> likeUnlikeImage(favImageProvider) async {
+    final dbHelper = FavImageDatabaseHelper.instance;
+    final hasData =
+        await dbHelper.hasData(widget.unPlashResponse.id.toString());
+    if (!hasData) {
+      FavImage favImage = new FavImage(
+        widget.unPlashResponse.id.toString(),
+        widget.unPlashResponse.urls.raw,
+        widget.unPlashResponse.urls.full,
+        widget.unPlashResponse.urls.regular,
+        widget.unPlashResponse.urls.small,
+        widget.unPlashResponse.urls.thumb,
+        widget.unPlashResponse.blurHash,
+      );
+      favImageProvider.addImageToFav(favImage);
       showOverlayNotification((context) {
         return CustomNotificationOnPage(
           icon: Icons.favorite,
@@ -75,135 +118,87 @@ class ImageView extends StatelessWidget {
           subTitle: 'Image added in your Favourites.',
         );
       }, duration: Duration(milliseconds: 3000));
+    } else {
+      showOverlayNotification((context) {
+        return CustomNotificationOnPage(
+          icon: Icons.favorite,
+          iconColor: Colors.black,
+          subTitle: 'Image is already added to your Favourites.',
+        );
+      }, duration: Duration(milliseconds: 3000));
     }
-    return !isLiked;
   }
 
-  selectImage(parentContext) {
-    return showDialog(
-      context: parentContext,
-      builder: (context) {
-        return SimpleDialog(
-          title: Text("Download Image"),
-          children: <Widget>[
-            SimpleDialogOption(
-                child: Text("Small"),
-                onPressed: () {
-                  downloadImage(unPlashResponse.urls.small);
-                  Navigator.pop(context);
-                }),
-            SimpleDialogOption(
-                child: Text("Regular"),
-                onPressed: () {
-                  downloadImage(unPlashResponse.urls.regular);
-                  Navigator.pop(context);
-                }),
-            SimpleDialogOption(
-                child: Text("Full"),
-                onPressed: () {
-                  downloadImage(unPlashResponse.urls.full);
-                  Navigator.pop(context);
-                }),
-            SimpleDialogOption(
-                child: Text("Raw"),
-                onPressed: () {
-                  downloadImage(unPlashResponse.urls.raw);
-                  Navigator.pop(context);
-                }),
-            Consumer<FavImageProvider>(
-                builder: (context, favImageProvider, child) {
-              return SimpleDialogOption(
-                  child: Text("Like Image"),
-                  onPressed: () async {
-                    final dbHelper = FavImageDatabaseHelper.instance;
-                    final hasData =
-                        await dbHelper.hasData(unPlashResponse.id.toString());
-                    if (!hasData) {
-                      FavImage favImage = new FavImage(
-                        unPlashResponse.id.toString(),
-                        unPlashResponse.urls.raw,
-                        unPlashResponse.urls.full,
-                        unPlashResponse.urls.regular,
-                        unPlashResponse.urls.small,
-                        unPlashResponse.urls.thumb,
-                        unPlashResponse.blurHash,
-                      );
-                      favImageProvider.addImageToFav(favImage);
-                      showOverlayNotification((context) {
-                        return CustomNotificationOnPage(
-                          icon: Icons.favorite,
-                          iconColor: Color.fromRGBO(245, 7, 59, 1),
-                          subTitle: 'Image added in your Favourites.',
-                        );
-                      }, duration: Duration(milliseconds: 3000));
-                    } else {
-                      showOverlayNotification((context) {
-                        return CustomNotificationOnPage(
-                          icon: Icons.favorite,
-                          iconColor: Colors.black,
-                          subTitle:
-                              'Image is already added to your Favourites.',
-                        );
-                      }, duration: Duration(milliseconds: 3000));
-                    }
-                    Navigator.pop(context);
-                  });
-            }),
-            SimpleDialogOption(
-              child: Text(
-                "Cancel",
-                style: TextStyle(color: Colors.red),
-              ),
-              onPressed: () => Navigator.pop(context),
-            )
-          ],
-        );
-      },
-    );
+  void _onVerticalSwipe(SwipeDirection direction) {
+    if (direction == SwipeDirection.up) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
+  void _onHorizontalSwipe(SwipeDirection direction) {
+    if (direction == SwipeDirection.left) {
+    } else {}
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Hero(
-            tag: unPlashResponse.id,
-            child: InteractiveViewer(
-              child: CachedNetworkImage(
-                imageUrl: unPlashResponse.urls.small,
-                imageBuilder: (context, imageProvider) => Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
+      body: SimpleGestureDetector(
+        onVerticalSwipe: _onVerticalSwipe,
+        onHorizontalSwipe: _onHorizontalSwipe,
+        swipeConfig: SimpleSwipeConfig(
+          verticalThreshold: 40.0,
+          horizontalThreshold: 40.0,
+          swipeDetectionBehavior: SwipeDetectionBehavior.continuousDistinct,
+        ),
+        child: Stack(
+          children: [
+            Hero(
+              tag: widget.unPlashResponse.id,
+              child: InteractiveViewer(
+                child: CachedNetworkImage(
+                  imageUrl: widget.unPlashResponse.urls.small,
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
+                  placeholder: (context, url) => Center(
+                    child: GradientText("Chitr",
+                        gradient: LinearGradient(colors: [
+                          Color.fromRGBO(254, 225, 64, 1),
+                          Color.fromRGBO(245, 87, 108, 1),
+                        ]),
+                        style: TextStyle(
+                          fontSize: 47,
+                          fontFamily: 'DancingScript',
+                          letterSpacing: 1,
+                        ),
+                        textAlign: TextAlign.center),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
-                placeholder: (context, url) => Center(
-                  child: GradientText("Chitr",
-                      gradient: LinearGradient(colors: [
-                        Color.fromRGBO(254, 225, 64, 1),
-                        Color.fromRGBO(245, 87, 108, 1),
-                      ]),
-                      style: TextStyle(
-                        fontSize: 47,
-                        fontFamily: 'DancingScript',
-                        letterSpacing: 1,
-                      ),
-                      textAlign: TextAlign.center),
-                ),
-                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
-          ),
-        ],
+            Consumer<FavImageProvider>(
+                builder: (context, favImageProvider, child) {
+              return ImageViewAppBar(function: () {
+                likeUnlikeImage(favImageProvider);
+              });
+            }),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          selectImage(context);
+        onPressed: () async {
+          modal.mainBottomSheet(context, downloadOptionList, downloadImage);
         },
         child: Icon(
           Icons.download_sharp,

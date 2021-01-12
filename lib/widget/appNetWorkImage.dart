@@ -5,37 +5,41 @@ import 'package:flutter_blurhash/flutter_blurhash.dart';
 class AppNetWorkImage extends StatelessWidget {
   final String imageUrl;
   final String blur_hash;
-  final String userName;
+  final int width;
+  final int height;
 
-  const AppNetWorkImage(
-      {Key key,
-      @required this.imageUrl,
-      @required this.blur_hash,
-      @required this.userName})
-      : super(key: key);
+  const AppNetWorkImage({
+    Key key,
+    @required this.imageUrl,
+    @required this.blur_hash,
+    @required this.width,
+    @required this.height,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        CachedNetworkImage(
-          imageUrl: imageUrl,
-          imageBuilder: (context, imageProvider) => Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
-              ),
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      imageBuilder: (context, imageProvider) => AspectRatio(
+        aspectRatio: width / height,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(4)),
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
             ),
           ),
-          placeholder: (context, url) => BlurHash(
-            hash:
-                blur_hash != null ? blur_hash : "LBAdAqof00WCqZj[PDay0.WB}pof",
-          ),
-          errorWidget: (context, url, error) => Icon(Icons.error),
         ),
-      ],
+      ),
+      placeholder: (context, url) => AspectRatio(
+        aspectRatio: width / height,
+        child: Center(
+            child: BlurHash(
+          hash: blur_hash != null ? blur_hash : "LBAdAqof00WCqZj[PDay0.WB}pof",
+        )),
+      ),
+      errorWidget: (context, url, error) => Icon(Icons.error),
     );
   }
 }

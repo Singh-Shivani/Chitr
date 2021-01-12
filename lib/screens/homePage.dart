@@ -1,8 +1,8 @@
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
-
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../api/networking.dart';
 import 'imageView.dart';
 
@@ -55,52 +55,55 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(top: 10, left: 10, right: 10),
-        child: GridView.builder(
-            controller: _scrollController,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 0.6,
-              crossAxisCount: 2,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-            ),
-            itemCount: unPlashResponse.length + 1,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              if (index == unPlashResponse.length) {
-                return Center(
-                  child: SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: CircularProgressIndicator(),
+        child: StaggeredGridView.countBuilder(
+          physics: BouncingScrollPhysics(),
+          crossAxisCount: 4,
+          shrinkWrap: true,
+          controller: _scrollController,
+          itemCount: unPlashResponse.length + 1,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == unPlashResponse.length) {
+              return Center(
+                child: Container(
+                  margin: EdgeInsets.only(top: 24),
+                  width: 30,
+                  height: 30,
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            } else {
+              UnPlashResponse item = unPlashResponse[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ImageView(unPlashResponse: unPlashResponse[index]),
+                    ),
+                  );
+                },
+                child: Hero(
+                  tag: item.id,
+                  child: AppNetWorkImage(
+                    blur_hash: item.blurHash,
+                    height: item.height,
+                    imageUrl: item.urls.thumb,
+                    width: item.width,
                   ),
-                );
-              } else {
-                UnPlashResponse item = unPlashResponse[index];
-                return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ImageView(
-                              unPlashResponse: unPlashResponse[index]),
-                        ),
-                      );
-                    },
-                    child: Hero(
-                      tag: item.id,
-                      child: AppNetWorkImage(
-                        imageUrl: item.urls.thumb,
-                        blur_hash: item.blurHash,
-                        userName: item.user.name,
-                      ),
-                    ));
-              }
-            }),
+                ),
+              );
+            }
+          },
+          staggeredTileBuilder: (int index) => new StaggeredTile.fit(2),
+          mainAxisSpacing: 8.0,
+          crossAxisSpacing: 8.0,
+        ),
       ),
     );
   }

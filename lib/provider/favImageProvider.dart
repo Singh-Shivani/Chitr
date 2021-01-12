@@ -53,7 +53,7 @@ class FavImageProvider with ChangeNotifier {
         notifyListeners();
       }
     } else {
-      print('query all NO DATA:');
+      print('No Image Found');
       notifyListeners();
     }
   }
