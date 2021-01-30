@@ -91,12 +91,10 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
                         crossAxisSpacing: 10,
                       ),
                       itemCount: favImageProvider.favImageList.length,
-                      shrinkWrap: true,
                       physics: ScrollPhysics(),
                       itemBuilder: (context, index) {
                         FavImage favImage =
                             favImageProvider.favImageList[index];
-
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(

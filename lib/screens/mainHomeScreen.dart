@@ -1,4 +1,5 @@
 import 'package:chitrwallpaperapp/helper/theme.dart';
+import 'package:chitrwallpaperapp/screens/allCategorys.dart';
 import 'package:chitrwallpaperapp/screens/favImagesPage.dart';
 import 'package:chitrwallpaperapp/screens/homePage.dart';
 import 'package:chitrwallpaperapp/screens/searchedImagePage.dart';
@@ -17,6 +18,7 @@ class _MainHomePageState extends State<MainHomePage> {
   final List<Widget> _children = [
     HomePage(),
     TrendingWallpaperPage(),
+    AllCategoryScreen(),
     FavouriteImagesPage(),
   ];
 
@@ -48,73 +50,73 @@ class _MainHomePageState extends State<MainHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(
-              Icons.info_outline,
-            ),
-            onPressed: () {
-              showAboutDialog(
-                  context: context,
-                  applicationName: 'Chitr',
-                  applicationVersion: 'by Shivani Singh\n\nV1.0',
-                  applicationLegalese:
-                      'All images are provided by unsplash.com',
-                  children: [
-                    Consumer<ThemeNotifier>(
-                      builder: (context, notifier, child) => SwitchListTile(
-                        title: Text("Dark Mode"),
-                        onChanged: (val) {
-                          notifier.toggleTheme();
-                        },
-                        value: notifier.darkTheme,
-                      ),
-                    ),
-                  ]);
-            }),
-        centerTitle: true,
-        elevation: 0.0,
-        title: Text("Chitr"),
-        actions: [
-          IconButton(
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        appBar: AppBar(
+          bottom: TabBar(
+            tabs: [
+              Tab(
+                text: "Home".toUpperCase(),
+              ),
+              Tab(
+                text: "Trending".toUpperCase(),
+              ),
+              Tab(
+                text: "Category".toUpperCase(),
+              ),
+              Tab(
+                text: "Like".toUpperCase(),
+              ),
+            ],
+          ),
+          leading: IconButton(
               icon: Icon(
-                Icons.search,
+                Icons.info_outline,
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SearchedImagePage()),
-                );
+                showAboutDialog(
+                    context: context,
+                    applicationName: 'Chitr',
+                    applicationVersion: 'by Shivani Singh\n\nV1.0',
+                    applicationLegalese:
+                        'All images are provided by unsplash.com',
+                    children: [
+                      Consumer<ThemeNotifier>(
+                        builder: (context, notifier, child) => SwitchListTile(
+                          title: Text("Dark Mode"),
+                          onChanged: (val) {
+                            notifier.toggleTheme();
+                          },
+                          value: notifier.darkTheme,
+                        ),
+                      ),
+                    ]);
               }),
-        ],
-      ),
-      body: PageView(
-        children: <Widget>[
-          ..._children,
-        ],
-        controller: pageController,
-        onPageChanged: onPageChanged,
-        physics: NeverScrollableScrollPhysics(),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+          centerTitle: true,
+          elevation: 0.0,
+          title: Text(
+            "Chitr".toUpperCase(),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.whatshot),
-            label: 'Trending ',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.thumb_up),
-            label: 'Liked',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: onTap,
+          actions: [
+            IconButton(
+                icon: Icon(
+                  Icons.search,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SearchedImagePage()),
+                  );
+                }),
+          ],
+        ),
+        body: TabBarView(
+          children: <Widget>[
+            ..._children,
+          ],
+        ),
       ),
     );
   }

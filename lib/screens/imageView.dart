@@ -4,6 +4,7 @@ import 'package:chitrwallpaperapp/database/data_modal/favImage.dart';
 import 'package:chitrwallpaperapp/modal/downloadOption.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/provider/favImageProvider.dart';
+import 'package:chitrwallpaperapp/widget/appDialogs.dart';
 import 'package:chitrwallpaperapp/widget/cartModaleView.dart';
 import 'package:chitrwallpaperapp/widget/imageViewAppBar.dart';
 import 'package:flutter/cupertino.dart';
@@ -63,12 +64,6 @@ class _ImageViewState extends State<ImageView> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    createUrlList();
-  }
-
   createUrlList() async {
     List urls = [
       {
@@ -94,6 +89,8 @@ class _ImageViewState extends State<ImageView> {
         downloadOptionList.add(downloadOption);
       });
     }
+    Navigator.pop(context);
+    modal.mainBottomSheet(context, downloadOptionList, downloadImage);
   }
 
   Future<void> likeUnlikeImage(favImageProvider) async {
@@ -145,6 +142,7 @@ class _ImageViewState extends State<ImageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: SimpleGestureDetector(
         onVerticalSwipe: _onVerticalSwipe,
         onHorizontalSwipe: _onHorizontalSwipe,
@@ -198,7 +196,12 @@ class _ImageViewState extends State<ImageView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          modal.mainBottomSheet(context, downloadOptionList, downloadImage);
+          if (downloadOptionList.length == 0) {
+            LodingDialogs.showLoadingDialog(context);
+            createUrlList();
+          } else {
+            modal.mainBottomSheet(context, downloadOptionList, downloadImage);
+          }
         },
         child: Icon(
           Icons.download_sharp,

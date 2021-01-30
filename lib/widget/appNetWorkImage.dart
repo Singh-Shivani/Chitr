@@ -34,10 +34,16 @@ class AppNetWorkImage extends StatelessWidget {
       ),
       placeholder: (context, url) => AspectRatio(
         aspectRatio: width / height,
-        child: Center(
-            child: BlurHash(
-          hash: blur_hash != null ? blur_hash : "LBAdAqof00WCqZj[PDay0.WB}pof",
-        )),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(4)),
+          ),
+          child: BlurHash(
+            image: imageUrl,
+            hash:
+                blur_hash != null ? blur_hash : "LBAdAqof00WCqZj[PDay0.WB}pof",
+          ),
+        ),
       ),
       errorWidget: (context, url, error) => Icon(Icons.error),
     );

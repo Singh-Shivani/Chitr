@@ -49,7 +49,6 @@ class Modal {
         title,
         style: TextStyle(
           fontSize: 16,
-          color: Color(0xff000000),
         ),
       ),
       trailing: new Text(

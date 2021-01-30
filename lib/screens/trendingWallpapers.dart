@@ -59,12 +59,10 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        margin: EdgeInsets.only(top: 8),
+        padding: EdgeInsets.only(top: 4, left: 4, right: 4),
         child: StaggeredGridView.countBuilder(
           crossAxisCount: 4,
-          physics: BouncingScrollPhysics(),
-          shrinkWrap: true,
+          // physics: BouncingScrollPhysics(),
           controller: _scrollController,
           itemCount: unPlashResponse.length + 1,
           itemBuilder: (BuildContext context, int index) {
@@ -94,14 +92,14 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
                   child: AppNetWorkImage(
                     blur_hash: item.blurHash,
                     height: item.height,
-                    imageUrl: item.urls.thumb,
+                    imageUrl: item.urls.small,
                     width: item.width,
                   ),
                 ),
               );
             }
           },
-          staggeredTileBuilder: (int index) => new StaggeredTile.fit(2),
+          staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
           mainAxisSpacing: 8.0,
           crossAxisSpacing: 8.0,
         ),

@@ -1,30 +1,32 @@
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
+import 'package:chitrwallpaperapp/modal/topic.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
+import 'package:chitrwallpaperapp/widget/gradientAppBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../api/networking.dart';
 import 'imageView.dart';
 
-class SearchedImagePage extends StatefulWidget {
+class TopicImagesScreen extends StatefulWidget {
+  final Topics topics;
+
+  const TopicImagesScreen({Key key, @required this.topics}) : super(key: key);
   @override
-  _SearchedImagePageState createState() => _SearchedImagePageState();
+  _TopicImagesScreenState createState() => _TopicImagesScreenState();
 }
 
-class _SearchedImagePageState extends State<SearchedImagePage> {
+class _TopicImagesScreenState extends State<TopicImagesScreen> {
   String searchText;
   int pageNumber = 1;
   List<UnPlashResponse> unPlashResponse = [];
   var _textController = TextEditingController();
-  FocusNode searchFocusNode;
+
   ScrollController _scrollController = ScrollController();
 
-  void getSearchedImages(
-    int pageNumber,
-  ) async {
+  void getTopic(String topicId) async {
     try {
-      var data = await FetchImages()
-          .getSearchedImages(pageNumber, _textController.text);
+      var data = await FetchImages().getTopicImage(pageNumber, topicId);
       setState(() {
         unPlashResponse.addAll(data);
       });
@@ -33,10 +35,12 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
     }
   }
 
-  void loadMoreImages(String query) async {
+  void loadMoreImages(String topicId) async {
     try {
       pageNumber = pageNumber + 1;
-      var data = await FetchImages().getSearchedImages(pageNumber, query);
+      print("pageNumber");
+      print(pageNumber);
+      var data = await FetchImages().getTopicImage(pageNumber, topicId);
       setState(() {
         unPlashResponse.addAll(data);
       });
@@ -48,12 +52,12 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
   @override
   void initState() {
     super.initState();
-    searchFocusNode = FocusNode();
-    searchFocusNode.requestFocus();
+    getTopic(widget.topics.id);
+
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        loadMoreImages(searchText);
+        loadMoreImages(widget.topics.id);
       }
     });
   }
@@ -61,7 +65,6 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
   @override
   void dispose() {
     _textController.dispose();
-    searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -71,56 +74,26 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
       body: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
-          SliverAppBar(
-            floating: true,
-            title: Container(
-              margin: EdgeInsets.symmetric(vertical: 12),
-              height: 44,
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.all(Radius.circular(6.0)),
-              ),
-              child: TextField(
-                focusNode: searchFocusNode,
-                onSubmitted: (value) {
-                  searchFocusNode.unfocus();
-                  setState(() {
-                    searchText = value;
-                    getSearchedImages(
-                      pageNumber,
-                    );
-                  });
-                },
-                controller: _textController,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  filled: true,
-                  hintText: "Search UnsPlash Images",
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      _textController.clear();
-                      setState(() {
-                        searchText = "";
-                        unPlashResponse.clear();
-                      });
-                    },
-                    icon: Icon(
-                      Icons.clear,
-                      color: Color.fromRGBO(13, 26, 59, 1),
+          AppAppbar(
+            title: widget.topics.title,
+            imageUrl: widget.topics.coverPhoto.urls.small,
+            subTitle: widget.topics.description,
+            blur_hash: widget.topics.coverPhoto.blurHash,
+            height: widget.topics.coverPhoto.height,
+            width: widget.topics.coverPhoto.width,
+          ),
+          unPlashResponse == null
+              ? SliverToBoxAdapter(
+                  child: Center(
+                    child: Center(
+                      child: Container(
+                        margin: EdgeInsets.only(top: 24),
+                        width: 30,
+                        height: 30,
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
-          ),
-          (searchText == null || searchText.isEmpty)
-              ? SliverFillRemaining(
-                  child: Center(
-                      child: Icon(
-                    Icons.search,
-                    color: Theme.of(context).accentColor,
-                    size: 66,
-                  )),
                 )
               : SliverStaggeredGrid.countBuilder(
                   crossAxisCount: 4,

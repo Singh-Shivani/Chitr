@@ -3,6 +3,7 @@ import 'package:chitrwallpaperapp/database/dataBaseHelper/database_helper.dart';
 import 'package:chitrwallpaperapp/database/data_modal/favImage.dart';
 import 'package:chitrwallpaperapp/modal/downloadOption.dart';
 import 'package:chitrwallpaperapp/provider/favImageProvider.dart';
+import 'package:chitrwallpaperapp/widget/appDialogs.dart';
 import 'package:chitrwallpaperapp/widget/cartModaleView.dart';
 import 'package:chitrwallpaperapp/widget/imageViewAppBar.dart';
 import 'package:flutter/cupertino.dart';
@@ -63,12 +64,6 @@ class _FavImageViewState extends State<FavImageView> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    createUrlList();
-  }
-
   createUrlList() async {
     List urls = [
       {
@@ -93,6 +88,8 @@ class _FavImageViewState extends State<FavImageView> {
       setState(() {
         downloadOptionList.add(downloadOption);
       });
+      Navigator.pop(context);
+      modal.mainBottomSheet(context, downloadOptionList, downloadImage);
     }
   }
 
@@ -106,7 +103,6 @@ class _FavImageViewState extends State<FavImageView> {
 
   void _onHorizontalSwipe(SwipeDirection direction) {
     if (direction == SwipeDirection.left) {
-      ;
     } else {}
   }
 
@@ -136,6 +132,7 @@ class _FavImageViewState extends State<FavImageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: SimpleGestureDetector(
         onVerticalSwipe: _onVerticalSwipe,
         onHorizontalSwipe: _onHorizontalSwipe,
@@ -189,7 +186,12 @@ class _FavImageViewState extends State<FavImageView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          modal.mainBottomSheet(context, downloadOptionList, downloadImage);
+          if (downloadOptionList.length == 0) {
+            LodingDialogs.showLoadingDialog(context);
+            createUrlList();
+          } else {
+            modal.mainBottomSheet(context, downloadOptionList, downloadImage);
+          }
         },
         child: Icon(
           Icons.download_sharp,

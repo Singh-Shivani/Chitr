@@ -3,12 +3,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 ThemeData light = ThemeData(
   brightness: Brightness.light,
-  primarySwatch: Colors.grey,
+  primarySwatch: Colors.deepPurple,
 );
 
 ThemeData dark = ThemeData(
   brightness: Brightness.dark,
-  primarySwatch: Colors.green,
+  primarySwatch: Colors.deepPurple,
 );
 
 class ThemeNotifier extends ChangeNotifier {
