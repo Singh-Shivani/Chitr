@@ -9,10 +9,12 @@ const apiUrl = 'https://api.unsplash.com/photos?client_id=$apiKey';
 
 const mainUrl = 'https://api.unsplash.com';
 
+const per_page = "per_page=25";
+
 class FetchImages {
   Future getLatestImages(int pageNumber) async {
     String url =
-        '$apiUrl&order_by=latest&orientation=portrait&&per_page=15&per_page=20&page=$pageNumber';
+        '$apiUrl&order_by=latest&orientation=portrait&&=15&$per_page&page=$pageNumber';
     http.Response response = await http.get(url);
 
     List<UnPlashResponse> unPlashResponseList = [];
@@ -29,7 +31,7 @@ class FetchImages {
   }
 
   Future getCategory() async {
-    String url = '$mainUrl/topics?client_id=$apiKey&per_page=30';
+    String url = '$mainUrl/topics?client_id=$apiKey&$per_page';
     http.Response response = await http.get(url);
 
     List<Topics> topicsList = [];
@@ -47,7 +49,7 @@ class FetchImages {
 
   Future getTopicImage(int pageNumber, String topicId) async {
     String url =
-        '$mainUrl/topics/$topicId/photos?client_id=$apiKey&per_page=25&page=$pageNumber';
+        '$mainUrl/topics/$topicId/photos?client_id=$apiKey&$per_page&page=$pageNumber';
     http.Response response = await http.get(url);
 
     List<UnPlashResponse> unPlashResponseList = [];
@@ -64,7 +66,7 @@ class FetchImages {
   }
 
   Future getTrendingImages(int pageNumber) async {
-    String url = '$apiUrl&order_by=popular&per_page=20&page=$pageNumber';
+    String url = '$apiUrl&order_by=popular&$per_page&page=$pageNumber';
     http.Response response = await http.get(url);
 
     List<UnPlashResponse> unPlashResponseList = [];
@@ -82,7 +84,7 @@ class FetchImages {
 
   Future getSearchedImages(int pageNumber, String query) async {
     String url =
-        'https://api.unsplash.com/search/photos?client_id=$apiKey&per_page=20&query=$query&page=$pageNumber';
+        'https://api.unsplash.com/search/photos?client_id=$apiKey&$per_page&query=$query&page=$pageNumber';
     http.Response response = await http.get(url);
 
     List<UnPlashResponse> unPlashResponseList = [];

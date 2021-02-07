@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           child: Consumer<ThemeNotifier>(
             builder: (context, ThemeNotifier notifier, child) {
               return MaterialApp(
-                title: 'Flutter Theme Provider',
+                title: 'Chitr',
                 theme: notifier.darkTheme ? dark : light,
                 home: MainHomePage(),
               );
