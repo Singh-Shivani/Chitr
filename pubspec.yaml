@@ -16,21 +16,16 @@ dependencies:
   http: ^0.12.1
   salomon_bottom_bar: ^2.0.0
   like_button: ^0.2.0
-  image_downloader: ^0.19.2
+  image_downloader: ^0.20.1
   overlay_support: ^1.0.4
   gradient_text: ^1.0.2
-  cached_network_image: ^2.3.3
-  material_floating_search_bar: ^0.2.3
-  flappy_search_bar: ^1.4.1
+  shared_preferences: ^0.5.12+4
   flutter_staggered_grid_view: ^0.3.4
-  # flutter_staggered_grid_view:
-  # git:
-  #   url: https://github.com/BertrandBev/flutter_staggered_grid_view.git
   flutter_blurhash: ^0.5.0
   provider: ^4.3.2+2
   simple_gesture_detector: ^0.1.4
   filesize: ^1.0.4
-  shared_preferences:
+  cached_network_image: ^2.5.0
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:flutter/material.dart';
@@ -57,9 +58,10 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
+    var cellNumber = Helper().getMobileOrientation(context);
     return StaggeredGridView.countBuilder(
       padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
-      crossAxisCount: 4,
+      crossAxisCount: cellNumber,
       // physics: BouncingScrollPhysics(),
       controller: _scrollController,
       itemCount: unPlashResponse.length + 1,

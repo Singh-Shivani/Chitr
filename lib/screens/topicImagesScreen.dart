@@ -1,3 +1,4 @@
+import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/modal/topic.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
@@ -38,8 +39,6 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
   void loadMoreImages(String topicId) async {
     try {
       pageNumber = pageNumber + 1;
-      print("pageNumber");
-      print(pageNumber);
       var data = await FetchImages().getTopicImage(pageNumber, topicId);
       setState(() {
         unPlashResponse.addAll(data);
@@ -70,6 +69,7 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var cellNumber = Helper().getMobileOrientation(context);
     return Scaffold(
       body: CustomScrollView(
         controller: _scrollController,
@@ -96,7 +96,7 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
                   ),
                 )
               : SliverStaggeredGrid.countBuilder(
-                  crossAxisCount: 4,
+                  crossAxisCount: cellNumber,
                   itemCount: unPlashResponse.length + 1,
                   itemBuilder: (BuildContext context, int index) {
                     if (index == unPlashResponse.length) {

@@ -1,4 +1,5 @@
 import 'package:chitrwallpaperapp/api/networking.dart';
+import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/topic.dart';
 import 'package:chitrwallpaperapp/screens/topicImagesScreen.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
@@ -36,6 +37,7 @@ class _AllCategoryScreenState extends State<AllCategoryScreen>
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
+    var cellNumber = Helper().getMobileOrientation(context);
     return topicsList.length == 0
         ? Center(
             child: CircularProgressIndicator(),
@@ -43,7 +45,7 @@ class _AllCategoryScreenState extends State<AllCategoryScreen>
         : StaggeredGridView.countBuilder(
             padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
             // physics: BouncingScrollPhysics(),
-            crossAxisCount: 4,
+            crossAxisCount: cellNumber,
             itemCount: topicsList.length,
             itemBuilder: (BuildContext context, int index) {
               Topics topics = topicsList[index];

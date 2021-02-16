@@ -1,4 +1,7 @@
+import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
+import 'package:chitrwallpaperapp/responsive/enums/device_screen_type.dart';
+import 'package:chitrwallpaperapp/responsive/utils/ui_utils.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -57,9 +60,11 @@ class _HomePageState extends State<HomePage>
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
+    var cellNumber = Helper().getMobileOrientation(context);
+
     return StaggeredGridView.countBuilder(
       padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
-      crossAxisCount: 4,
+      crossAxisCount: cellNumber,
       controller: _scrollController,
       itemCount: unPlashResponse.length + 1,
       itemBuilder: (BuildContext context, int index) {
