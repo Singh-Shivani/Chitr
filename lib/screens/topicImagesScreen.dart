@@ -64,6 +64,7 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
   @override
   void dispose() {
     _textController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 

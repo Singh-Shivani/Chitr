@@ -77,6 +77,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
     return Scaffold(
       body: DismissKeyBoardView(
         child: NotificationListener<ScrollNotification>(
+          // ignore: missing_return
           onNotification: (scrollNotification) {
             if (scrollNotification is ScrollStartNotification) {
               _onStartScroll(scrollNotification.metrics);

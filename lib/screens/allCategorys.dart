@@ -1,9 +1,13 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:chitrwallpaperapp/api/networking.dart';
 import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/topic.dart';
 import 'package:chitrwallpaperapp/screens/topicImagesScreen.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:flutter/material.dart';
+import 'package:chitrwallpaperapp/const/constants.dart' as Constants;
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class AllCategoryScreen extends StatefulWidget {
@@ -16,16 +20,44 @@ class _AllCategoryScreenState extends State<AllCategoryScreen>
   bool get wantKeepAlive => true;
   int pageNumber = 1;
   List<Topics> topicsList = [];
+  bool isOffline = false;
 
   void getCategory(int pageNumber) async {
+    if (isOffline && await Helper().hasConnection() != true) {
+      getLocalSavedData();
+      return;
+    }
     try {
       var data = await FetchImages().getCategory();
       setState(() {
         topicsList = data;
       });
+      saveDataToLocal(json.encode(data));
     } catch (e) {
+      getLocalSavedData();
       print(e);
     }
+  }
+
+  Future<void> getLocalSavedData() async {
+    var saveData =
+        await Helper().getSavedResponse(Constants.OFFLINE_TOPICES_KEY);
+    if (saveData != null) {
+      var data = jsonDecode(saveData);
+      for (var i = 0; i < data.length; i++) {
+        Topics topics = new Topics.fromJson(data[i]);
+        setState(() {
+          topicsList.add(topics);
+        });
+      }
+    } else {
+      Helper().showToast("No Offine Data To Show");
+    }
+  }
+
+  void saveDataToLocal(String data) {
+    Helper().saveReponse(Constants.OFFLINE_TOPICES_KEY, data);
+    print("SAVE CATEGORU");
   }
 
   @override

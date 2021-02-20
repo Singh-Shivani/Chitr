@@ -13,7 +13,6 @@ class MainHomePage extends StatefulWidget {
 }
 
 class _MainHomePageState extends State<MainHomePage> {
-  int _selectedIndex = 0;
   PageController pageController;
   final List<Widget> _children = [
     HomePage(),
@@ -35,9 +34,7 @@ class _MainHomePageState extends State<MainHomePage> {
   }
 
   onPageChanged(int pageIndex) {
-    setState(() {
-      this._selectedIndex = pageIndex;
-    });
+    setState(() {});
   }
 
   onTap(int pageIndex) {

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chitrwallpaperapp/database/dataBaseHelper/database_helper.dart';
 import 'package:chitrwallpaperapp/database/data_modal/favImage.dart';
+import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/downloadOption.dart';
 import 'package:chitrwallpaperapp/provider/favImageProvider.dart';
 import 'package:chitrwallpaperapp/widget/appDialogs.dart';
@@ -38,13 +39,6 @@ class _FavImageViewState extends State<FavImageView> {
         imageUrl,
         destination: AndroidDestinationType.directoryPictures,
       );
-      if (imageId == null) {}
-      // Below is a method of obtaining saved image information.
-      var fileName = await ImageDownloader.findName(imageId);
-      var path = await ImageDownloader.findPath(imageId);
-      var size = await ImageDownloader.findByteSize(imageId);
-      var mimeType = await ImageDownloader.findMimeType(imageId);
-
       showOverlayNotification((context) {
         return CustomNotificationOnPage(
           icon: Icons.done,
@@ -187,8 +181,13 @@ class _FavImageViewState extends State<FavImageView> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           if (downloadOptionList.length == 0) {
-            LodingDialogs.showLoadingDialog(context);
-            createUrlList();
+            if (await Helper().hasConnection()) {
+              LodingDialogs.showLoadingDialog(context);
+              createUrlList();
+            } else {
+              Helper().showToast(
+                  "No internet connection can't download image now.");
+            }
           } else {
             modal.mainBottomSheet(context, downloadOptionList, downloadImage);
           }

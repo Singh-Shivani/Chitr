@@ -1,13 +1,16 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
-import 'package:chitrwallpaperapp/responsive/enums/device_screen_type.dart';
-import 'package:chitrwallpaperapp/responsive/utils/ui_utils.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../api/networking.dart';
 import 'imageView.dart';
+import 'package:chitrwallpaperapp/const/constants.dart' as Constants;
 
 class HomePage extends StatefulWidget {
   @override
@@ -20,16 +23,44 @@ class _HomePageState extends State<HomePage>
   int pageNumber = 1;
   List<UnPlashResponse> unPlashResponse = [];
   ScrollController _scrollController = ScrollController();
+  bool isOffline = false;
+  StreamSubscription _connectionChangeStream;
 
   void getLatestImages(int pageNumber) async {
-    try {
-      var data = await FetchImages().getLatestImages(pageNumber);
-      setState(() {
-        unPlashResponse = data;
-      });
-    } catch (e) {
-      print(e);
+    if (isOffline && await Helper().hasConnection() != true) {
+      getLocalSavedData();
+      return;
+    } else {
+      try {
+        var data = await FetchImages().getLatestImages(pageNumber);
+        setState(() {
+          unPlashResponse = data;
+        });
+        saveDataToLocal(json.encode(data));
+      } catch (e) {
+        getLocalSavedData();
+        print(e);
+      }
     }
+  }
+
+  Future<void> getLocalSavedData() async {
+    var saveData = await Helper().getSavedResponse(Constants.OFFLINE_SHOW_KEY);
+    if (saveData != null) {
+      var data = jsonDecode(saveData);
+      for (var i = 0; i < data.length; i++) {
+        UnPlashResponse item = new UnPlashResponse.fromJson(data[i]);
+        setState(() {
+          unPlashResponse.add(item);
+        });
+      }
+    } else {
+      Helper().showToast("No Offine Data To Show");
+    }
+  }
+
+  void saveDataToLocal(String data) {
+    Helper().saveReponse(Constants.OFFLINE_SHOW_KEY, data);
   }
 
   void loadMoreImages() async {
@@ -39,6 +70,7 @@ class _HomePageState extends State<HomePage>
       setState(() {
         unPlashResponse.addAll(data);
       });
+      saveDataToLocal(json.encode(unPlashResponse));
     } catch (e) {
       print(e);
     }
@@ -47,7 +79,6 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    getLatestImages(pageNumber);
     _scrollController.addListener(() {
       if (_scrollController.offset >=
               _scrollController.position.maxScrollExtent &&
@@ -55,13 +86,30 @@ class _HomePageState extends State<HomePage>
         loadMoreImages();
       }
     });
+    _connectionChangeStream = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      if (result != ConnectivityResult.none) {
+        bool hasConection = await DataConnectionChecker().hasConnection;
+        setState(() {
+          isOffline = !hasConection;
+        });
+      }
+    });
+    getLatestImages(pageNumber);
+  }
+
+  @override
+  void dispose() {
+    _connectionChangeStream.cancel();
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
     var cellNumber = Helper().getMobileOrientation(context);
-
     return StaggeredGridView.countBuilder(
       padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
       crossAxisCount: cellNumber,

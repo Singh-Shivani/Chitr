@@ -45,7 +45,8 @@ class AppNetWorkImage extends StatelessWidget {
           ),
         ),
       ),
-      errorWidget: (context, url, error) => Icon(Icons.error),
+      errorWidget: (context, url, error) => AspectRatio(
+          aspectRatio: width / height, child: Center(child: Icon(Icons.error))),
     );
   }
 }

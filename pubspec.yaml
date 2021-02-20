@@ -26,6 +26,9 @@ dependencies:
   simple_gesture_detector: ^0.1.4
   filesize: ^1.0.4
   cached_network_image: ^2.5.0
+  connectivity: ^2.0.2
+  data_connection_checker: ^0.3.4
+  fluttertoast: ^7.1.8
 
 dev_dependencies:
   flutter_test:
