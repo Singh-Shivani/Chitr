@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
+import 'package:chitrwallpaperapp/widget/infoView.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,6 +25,7 @@ class _HomePageState extends State<HomePage>
   List<UnPlashResponse> unPlashResponse = [];
   ScrollController _scrollController = ScrollController();
   bool isOffline = false;
+
   StreamSubscription _connectionChangeStream;
 
   void getLatestImages(int pageNumber) async {
@@ -33,12 +35,14 @@ class _HomePageState extends State<HomePage>
     } else {
       try {
         var data = await FetchImages().getLatestImages(pageNumber);
+
         setState(() {
           unPlashResponse = data;
         });
         saveDataToLocal(json.encode(data));
       } catch (e) {
         getLocalSavedData();
+
         print(e);
       }
     }

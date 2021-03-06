@@ -29,6 +29,9 @@ dependencies:
   connectivity: ^2.0.2
   data_connection_checker: ^0.3.4
   fluttertoast: ^7.1.8
+  animate_do: ^1.7.5
+  progress_indicators: ^0.1.5
+  flutter_html:
 
 dev_dependencies:
   flutter_test:
