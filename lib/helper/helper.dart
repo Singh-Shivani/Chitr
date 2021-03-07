@@ -23,6 +23,19 @@ class Helper {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
 
+  isTablet(BuildContext context) {
+    bool isTablet = false;
+    var mediaQuery = MediaQuery.of(context);
+    DeviceScreenType deviceScreenType = getDeviceType(mediaQuery);
+
+    if (deviceScreenType == DeviceScreenType.Mobile) {
+      isTablet = false;
+    } else if (deviceScreenType == DeviceScreenType.Tablet) {
+      isTablet = true;
+    }
+    return isTablet;
+  }
+
   saveReponse(String key, String data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(key, data);

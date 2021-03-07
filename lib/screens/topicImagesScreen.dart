@@ -71,13 +71,16 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
   @override
   Widget build(BuildContext context) {
     var cellNumber = Helper().getMobileOrientation(context);
+    var isTablet = Helper().isTablet(context);
     return Scaffold(
       body: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
           AppAppbar(
             title: widget.topics.title,
-            imageUrl: widget.topics.coverPhoto.urls.regular,
+            imageUrl: isTablet
+                ? widget.topics.coverPhoto.urls.regular
+                : widget.topics.coverPhoto.urls.small,
             subTitle: widget.topics.description,
             blur_hash: widget.topics.coverPhoto.blurHash,
             height: widget.topics.coverPhoto.height,

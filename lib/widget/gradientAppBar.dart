@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/responsive/enums/device_screen_type.dart';
 import 'package:chitrwallpaperapp/responsive/utils/ui_utils.dart';
+import 'package:chitrwallpaperapp/widget/emojiText.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 
@@ -20,6 +22,12 @@ class AppAppbar extends StatelessWidget {
     @required this.width,
     @required this.height,
   }) : super(key: key);
+
+  String removeAllHtmlTags(String htmlText) {
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+
+    return htmlText.replaceAll(exp, '');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +89,11 @@ class AppAppbar extends StatelessWidget {
                           height: 8,
                         ),
                         Text(
-                          subTitle,
-                          style: TextStyle(color: Colors.white, fontSize: 16),
+                          removeAllHtmlTags(subTitle),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontFamily: ''),
                         ),
                       ],
                     ),
