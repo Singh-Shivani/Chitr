@@ -77,7 +77,7 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
         slivers: <Widget>[
           AppAppbar(
             title: widget.topics.title,
-            imageUrl: widget.topics.coverPhoto.urls.small,
+            imageUrl: widget.topics.coverPhoto.urls.regular,
             subTitle: widget.topics.description,
             blur_hash: widget.topics.coverPhoto.blurHash,
             height: widget.topics.coverPhoto.height,

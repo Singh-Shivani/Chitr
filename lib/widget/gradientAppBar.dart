@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chitrwallpaperapp/responsive/enums/device_screen_type.dart';
+import 'package:chitrwallpaperapp/responsive/utils/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 
@@ -21,8 +23,11 @@ class AppAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.of(context);
+    DeviceScreenType deviceScreenType = getDeviceType(mediaQuery);
     return SliverAppBar(
       expandedHeight: 364,
+      pinned: deviceScreenType == DeviceScreenType.Tablet ? true : false,
       title: Text(title),
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,

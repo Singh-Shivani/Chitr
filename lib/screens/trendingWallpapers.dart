@@ -55,7 +55,7 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
         });
       }
     } else {
-      Helper().showToast("No Offine Data To Show");
+      // Helper().showToast("No Offine Data To Show");
     }
   }
 
