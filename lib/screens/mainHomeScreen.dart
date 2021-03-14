@@ -83,7 +83,7 @@ class _MainHomePageState extends State<MainHomePage> {
                         builder: (context, notifier, child) => SwitchListTile(
                           title: Text("Dark Mode"),
                           onChanged: (val) {
-                            notifier.toggleTheme();
+                            notifier.toggleTheme(val);
                           },
                           value: notifier.darkTheme,
                         ),

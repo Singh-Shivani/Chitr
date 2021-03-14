@@ -23,9 +23,9 @@ class ThemeNotifier extends ChangeNotifier {
     _loadFromPrefs();
   }
 
-  toggleTheme() {
-    _darkTheme = !_darkTheme;
-    _saveToPrefs();
+  toggleTheme(bool val) {
+    _darkTheme = val;
+    _saveToPrefs(val);
     notifyListeners();
   }
 
@@ -35,12 +35,17 @@ class ThemeNotifier extends ChangeNotifier {
 
   _loadFromPrefs() async {
     await _initPrefs();
-    _darkTheme = _prefs.getBool(key) != null ? true : false;
+    bool theme = _prefs.getBool(key);
+    if (theme) {
+      _darkTheme = true;
+    } else {
+      _darkTheme = false;
+    }
     notifyListeners();
   }
 
-  _saveToPrefs() async {
+  _saveToPrefs(bool val) async {
     await _initPrefs();
-    _prefs.setBool(key, _darkTheme);
+    _prefs.setBool(key, val);
   }
 }
