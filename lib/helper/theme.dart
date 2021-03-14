@@ -36,7 +36,7 @@ class ThemeNotifier extends ChangeNotifier {
   _loadFromPrefs() async {
     await _initPrefs();
     bool theme = _prefs.getBool(key);
-    if (theme) {
+    if (theme != null && theme) {
       _darkTheme = true;
     } else {
       _darkTheme = false;
