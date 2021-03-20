@@ -91,7 +91,7 @@ class _AllCategoryScreenState extends State<AllCategoryScreen>
                     Hero(
                       tag: topics.id,
                       child: AppNetWorkImage(
-                        blur_hash: topics.coverPhoto.blurHash,
+                        blurHash: topics.coverPhoto.blurHash,
                         height: topics.coverPhoto.height,
                         imageUrl: topics.coverPhoto.urls.small,
                         width: topics.coverPhoto.width,

@@ -4,14 +4,14 @@ import 'package:flutter_blurhash/flutter_blurhash.dart';
 
 class AppNetWorkImage extends StatelessWidget {
   final String imageUrl;
-  final String blur_hash;
+  final String blurHash;
   final int width;
   final int height;
 
   const AppNetWorkImage({
     Key key,
     @required this.imageUrl,
-    @required this.blur_hash,
+    @required this.blurHash,
     @required this.width,
     @required this.height,
   }) : super(key: key);
@@ -40,8 +40,7 @@ class AppNetWorkImage extends StatelessWidget {
           ),
           child: BlurHash(
             image: imageUrl,
-            hash:
-                blur_hash != null ? blur_hash : "LBAdAqof00WCqZj[PDay0.WB}pof",
+            hash: blurHash != null ? blurHash : "LBAdAqof00WCqZj[PDay0.WB}pof",
           ),
         ),
       ),

@@ -13,7 +13,6 @@ import 'package:flutter/services.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_downloader/image_downloader.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -34,11 +33,6 @@ class _FavImageViewState extends State<FavImageView> {
 
   downloadImage(String imageUrl) async {
     try {
-      // Saved with this method.
-      var imageId = await ImageDownloader.downloadImage(
-        imageUrl,
-        destination: AndroidDestinationType.directoryPictures,
-      );
       showOverlayNotification((context) {
         return CustomNotificationOnPage(
           icon: Icons.done,

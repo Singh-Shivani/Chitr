@@ -170,7 +170,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                               child: Hero(
                                 tag: item.id,
                                 child: AppNetWorkImage(
-                                  blur_hash: item.blurHash,
+                                  blurHash: item.blurHash,
                                   height: item.height,
                                   imageUrl: item.urls.small,
                                   width: item.width,

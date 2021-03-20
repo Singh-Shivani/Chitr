@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/responsive/enums/device_screen_type.dart';
 import 'package:chitrwallpaperapp/responsive/utils/ui_utils.dart';
-import 'package:chitrwallpaperapp/widget/emojiText.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 
@@ -10,7 +8,7 @@ class AppAppbar extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String subTitle;
-  final String blur_hash;
+  final String blurHash;
   final int width;
   final int height;
   const AppAppbar({
@@ -18,7 +16,7 @@ class AppAppbar extends StatelessWidget {
     @required this.imageUrl,
     @required this.title,
     @required this.subTitle,
-    @required this.blur_hash,
+    @required this.blurHash,
     @required this.width,
     @required this.height,
   }) : super(key: key);
@@ -44,9 +42,8 @@ class AppAppbar extends StatelessWidget {
             aspectRatio: width / height,
             child: Center(
                 child: BlurHash(
-              hash: blur_hash != null
-                  ? blur_hash
-                  : "LBAdAqof00WCqZj[PDay0.WB}pof",
+              hash:
+                  blurHash != null ? blurHash : "LBAdAqof00WCqZj[PDay0.WB}pof",
             )),
           ),
           imageUrl: imageUrl,

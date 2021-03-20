@@ -113,7 +113,7 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
                             },
                             child: AppNetWorkImage(
                               imageUrl: favImage.thumb,
-                              blur_hash: favImage.blurHash,
+                              blurHash: favImage.blurHash,
                               height: 2,
                               width: 1,
                             ),

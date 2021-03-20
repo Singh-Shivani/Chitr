@@ -82,7 +82,7 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
                 ? widget.topics.coverPhoto.urls.regular
                 : widget.topics.coverPhoto.urls.small,
             subTitle: widget.topics.description,
-            blur_hash: widget.topics.coverPhoto.blurHash,
+            blurHash: widget.topics.coverPhoto.blurHash,
             height: widget.topics.coverPhoto.height,
             width: widget.topics.coverPhoto.width,
           ),
@@ -132,7 +132,7 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
                           child: Hero(
                             tag: item.id,
                             child: AppNetWorkImage(
-                              blur_hash: item.blurHash,
+                              blurHash: item.blurHash,
                               height: item.height,
                               imageUrl: item.urls.small,
                               width: item.width,
