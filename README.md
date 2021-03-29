@@ -17,11 +17,18 @@ Chitr provides all the basic requirements needed in a wallpaper app, like latest
 
 All the images are fetched through [Unsplash API](https://unsplash.com/developers) which gives realtime service so that you get the latest collections!🤩
 
-## Screens 📱
+## Android Screens 📱
 
 <p align="center">
 <img src="App Images/homePage.png" height="350"/> <img src="App Images/trendingPage.png" height="350" hspace="100"/> <img src="App Images/searchPage.png" height="350" /> <br><br>
 <img src="App Images/imageAddedToFav.png" height="350" /><img src="App Images/FavImagesPage.png" height="350" hspace="110"/> <img src="App Images/viewLicense.png" height="350" />
+</p>
+
+## iOS Screens 📱
+
+<p align="center">
+<img src="App Images/ios/homePage.png" height="350"/> <img src="App Images/ios/imageAddedToFav.png" height="350" hspace="100"/> <img src="App Images/ios/emptySearchPage.png" height="350" /> <br><br>
+<img src="App Images/ios/imageAddedToFav.png" height="350" /><img src="App Images/ios/FavImagesPage.png" height="350" hspace="110"/> <img src="App Images/ios/viewLicense.png" height="350" />
 </p>
 
 ## In action 👀
