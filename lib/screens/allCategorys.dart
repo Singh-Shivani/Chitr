@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:chitrwallpaperapp/const/constants.dart' as Constants;
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import '../helper/helper.dart';
+
 class AllCategoryScreen extends StatefulWidget {
   @override
   _AllCategoryScreenState createState() => _AllCategoryScreenState();
@@ -79,22 +81,34 @@ class _AllCategoryScreenState extends State<AllCategoryScreen>
               Topics topics = topicsList[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TopicImagesScreen(topics: topics),
-                    ),
-                  );
+                  if (topics.coverPhoto != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TopicImagesScreen(topics: topics),
+                      ),
+                    );
+                  } else {
+                    Helper().showToast("Some thing went worng");
+                  }
                 },
                 child: Stack(
                   children: [
                     Hero(
                       tag: topics.id,
                       child: AppNetWorkImage(
-                        blurHash: topics.coverPhoto.blurHash,
-                        height: topics.coverPhoto.height,
-                        imageUrl: topics.coverPhoto.urls.small,
-                        width: topics.coverPhoto.width,
+                        blurHash: topics.coverPhoto != null
+                            ? topics.coverPhoto.blurHash
+                            : "LBAdAqof00WCqZj[PDay0.WB}pof",
+                        height: topics.coverPhoto != null
+                            ? topics.coverPhoto.height
+                            : 200,
+                        imageUrl: topics.coverPhoto != null
+                            ? topics.coverPhoto.urls.small
+                            : "",
+                        width: topics.coverPhoto != null
+                            ? topics.coverPhoto.width
+                            : 200,
                       ),
                     ),
                     Container(
