@@ -2,6 +2,7 @@ import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:chitrwallpaperapp/widget/dismissKeyBoardView.dart';
+import 'package:chitrwallpaperapp/widget/loadingView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -20,7 +21,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
   var _textController = TextEditingController();
   FocusNode searchFocusNode;
   ScrollController _scrollController = ScrollController();
-
+  bool _loading = false;
   void getSearchedImages(
     int pageNumber,
   ) async {
@@ -29,9 +30,13 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
           .getSearchedImages(pageNumber, _textController.text);
       setState(() {
         unPlashResponse.addAll(data);
+        _loading = false;
       });
     } catch (e) {
       print(e);
+      setState(() {
+        _loading = false;
+      });
     }
   }
 
@@ -104,6 +109,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                         getSearchedImages(
                           pageNumber,
                         );
+                        _loading = true;
                       });
                     },
                     controller: _textController,
@@ -137,51 +143,58 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                         size: 66,
                       )),
                     )
-                  : SliverStaggeredGrid.countBuilder(
-                      crossAxisCount: cellNumber,
-                      itemCount: unPlashResponse.length + 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (index == unPlashResponse.length) {
-                          return Center(
-                            child: Center(
-                              child: Container(
-                                margin: EdgeInsets.only(top: 24),
-                                width: 30,
-                                height: 30,
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                          );
-                        } else {
-                          UnPlashResponse item = unPlashResponse[index];
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ImageView(
-                                      unPlashResponse: unPlashResponse[index]),
+                  : _loading == true
+                      ? SliverFillRemaining(
+                          child: LoadingView(
+                          isSliver: false,
+                        ))
+                      : SliverStaggeredGrid.countBuilder(
+                          crossAxisCount: cellNumber,
+                          itemCount: unPlashResponse.length + 1,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index == unPlashResponse.length) {
+                              return Center(
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 24),
+                                    width: 30,
+                                    height: 30,
+                                    child: CircularProgressIndicator(),
+                                  ),
                                 ),
                               );
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                  left: 4.0, right: 4.0, top: 8),
-                              child: Hero(
-                                tag: item.id,
-                                child: AppNetWorkImage(
-                                  blurHash: item.blurHash,
-                                  height: item.height,
-                                  imageUrl: item.urls.small,
-                                  width: item.width,
+                            } else {
+                              UnPlashResponse item = unPlashResponse[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ImageView(
+                                          unPlashResponse:
+                                              unPlashResponse[index]),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                      left: 4.0, right: 4.0, top: 8),
+                                  child: Hero(
+                                    tag: item.id,
+                                    child: AppNetWorkImage(
+                                      blurHash: item.blurHash,
+                                      height: item.height,
+                                      imageUrl: item.urls.small,
+                                      width: item.width,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                      staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-                    ),
+                              );
+                            }
+                          },
+                          staggeredTileBuilder: (int index) =>
+                              StaggeredTile.fit(2),
+                        ),
             ],
           ),
         ),

@@ -3,6 +3,7 @@ import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/modal/topic.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:chitrwallpaperapp/widget/gradientAppBar.dart';
+import 'package:chitrwallpaperapp/widget/loadingView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -86,19 +87,11 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
             height: widget.topics.coverPhoto.height,
             width: widget.topics.coverPhoto.width,
           ),
-          unPlashResponse == null
-              ? SliverToBoxAdapter(
-                  child: Center(
-                    child: Center(
-                      child: Container(
-                        margin: EdgeInsets.only(top: 24),
-                        width: 30,
-                        height: 30,
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  ),
-                )
+          unPlashResponse.length == 0
+              ? SliverFillRemaining(
+                  child: LoadingView(
+                  isSliver: false,
+                ))
               : SliverStaggeredGrid.countBuilder(
                   crossAxisCount: cellNumber,
                   itemCount: unPlashResponse.length + 1,

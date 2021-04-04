@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
+import 'package:chitrwallpaperapp/widget/loadingView.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
@@ -110,49 +111,53 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
   // ignore: must_call_super
   Widget build(BuildContext context) {
     var cellNumber = Helper().getMobileOrientation(context);
-    return StaggeredGridView.countBuilder(
-      padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
-      crossAxisCount: cellNumber,
-      // physics: BouncingScrollPhysics(),
-      controller: _scrollController,
-      itemCount: unPlashResponse.length + 1,
-      itemBuilder: (BuildContext context, int index) {
-        if (index == unPlashResponse.length) {
-          return Center(
-            child: Container(
-              margin: EdgeInsets.only(top: 24),
-              width: 30,
-              height: 30,
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else {
-          UnPlashResponse item = unPlashResponse[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      ImageView(unPlashResponse: unPlashResponse[index]),
-                ),
-              );
+    return unPlashResponse.length == 0
+        ? LoadingView(
+            isSliver: false,
+          )
+        : StaggeredGridView.countBuilder(
+            padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
+            crossAxisCount: cellNumber,
+            // physics: BouncingScrollPhysics(),
+            controller: _scrollController,
+            itemCount: unPlashResponse.length + 1,
+            itemBuilder: (BuildContext context, int index) {
+              if (index == unPlashResponse.length) {
+                return Center(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 24),
+                    width: 30,
+                    height: 30,
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              } else {
+                UnPlashResponse item = unPlashResponse[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ImageView(unPlashResponse: unPlashResponse[index]),
+                      ),
+                    );
+                  },
+                  child: Hero(
+                    tag: item.id,
+                    child: AppNetWorkImage(
+                      blurHash: item.blurHash,
+                      height: item.height,
+                      imageUrl: item.urls.small,
+                      width: item.width,
+                    ),
+                  ),
+                );
+              }
             },
-            child: Hero(
-              tag: item.id,
-              child: AppNetWorkImage(
-                blurHash: item.blurHash,
-                height: item.height,
-                imageUrl: item.urls.small,
-                width: item.width,
-              ),
-            ),
+            staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
+            mainAxisSpacing: 8.0,
+            crossAxisSpacing: 8.0,
           );
-        }
-      },
-      staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-      mainAxisSpacing: 8.0,
-      crossAxisSpacing: 8.0,
-    );
   }
 }

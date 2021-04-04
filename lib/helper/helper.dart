@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chitrwallpaperapp/responsive/enums/device_screen_type.dart';
 import 'package:chitrwallpaperapp/responsive/utils/ui_utils.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
@@ -69,5 +71,12 @@ class Helper {
         timeInSecForIosWeb: 1,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+
+  giveRandom() {
+    var rng = new Random();
+    for (var i = 0; i < 2; i++) {
+      return rng.nextInt(10);
+    }
   }
 }

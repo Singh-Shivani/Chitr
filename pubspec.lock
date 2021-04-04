@@ -527,6 +527,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.2+3"
+  shimmer:
+    dependency: "direct main"
+    description:
+      name: shimmer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.2"
   simple_gesture_detector:
     dependency: "direct main"
     description:

@@ -5,6 +5,7 @@ import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/topic.dart';
 import 'package:chitrwallpaperapp/screens/topicImagesScreen.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
+import 'package:chitrwallpaperapp/widget/loadingView.dart';
 import 'package:flutter/material.dart';
 import 'package:chitrwallpaperapp/const/constants.dart' as Constants;
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -69,8 +70,8 @@ class _AllCategoryScreenState extends State<AllCategoryScreen>
   Widget build(BuildContext context) {
     var cellNumber = Helper().getMobileOrientation(context);
     return topicsList.length == 0
-        ? Center(
-            child: CircularProgressIndicator(),
+        ? LoadingView(
+            isSliver: false,
           )
         : StaggeredGridView.countBuilder(
             padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
