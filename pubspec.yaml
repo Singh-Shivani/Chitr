@@ -13,7 +13,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.0
-  http: ^0.12.1
+  http: ^0.13.1
   salomon_bottom_bar: ^2.0.0
   like_button: ^0.2.0
   image_downloader: ^0.20.1

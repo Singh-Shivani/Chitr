@@ -76,7 +76,7 @@ class _ImageViewState extends State<ImageView> {
     ];
 
     for (var i = 0; i < urls.length; i++) {
-      http.Response r = await http.head(urls[i]['url']);
+      http.Response r = await http.head(Uri.parse(urls[i]['url']));
       DownloadOption downloadOption = new DownloadOption(
           urls[i]['url'], urls[i]['type'], r.headers["content-length"]);
       setState(() {

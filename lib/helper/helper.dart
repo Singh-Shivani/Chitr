@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../responsive/enums/device_screen_type.dart';
+
 class Helper {
   getMobileOrientation(context) {
     int cellCount = 4;
@@ -17,6 +19,8 @@ class Helper {
       cellCount = orientation == Orientation.portrait ? 4 : 8;
     } else if (deviceScreenType == DeviceScreenType.Tablet) {
       cellCount = 8;
+    } else if (deviceScreenType == DeviceScreenType.Desktop) {
+      cellCount = 18;
     }
     return cellCount;
   }

@@ -95,7 +95,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                 floating: true,
                 title: Container(
                   margin: EdgeInsets.symmetric(vertical: 12),
-                  height: 44,
+                  height: 42,
                   decoration: BoxDecoration(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     borderRadius: BorderRadius.all(Radius.circular(6.0)),
@@ -116,7 +116,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       filled: true,
-                      hintText: "Search UnsPlash Images",
+                      hintText: "Search Images",
                       suffixIcon: IconButton(
                         onPressed: () {
                           _textController.clear();

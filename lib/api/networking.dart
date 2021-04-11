@@ -12,7 +12,7 @@ class FetchImages {
   Future getLatestImages(int pageNumber) async {
     String url =
         '$apiUrl&order_by=latest&orientation=portrait&&=15&$per_page&page=$pageNumber';
-    http.Response response = await http.get(url);
+    http.Response response = await http.get(Uri.parse(url));
 
     List<UnPlashResponse> unPlashResponseList = [];
     if (response.statusCode == 200) {
@@ -29,7 +29,7 @@ class FetchImages {
 
   Future getCategory() async {
     String url = '$mainUrl/topics?client_id=$apiKey&$per_page';
-    http.Response response = await http.get(url);
+    http.Response response = await http.get(Uri.parse(url));
 
     List<Topics> topicsList = [];
     if (response.statusCode == 200) {
@@ -47,7 +47,7 @@ class FetchImages {
   Future getTopicImage(int pageNumber, String topicId) async {
     String url =
         '$mainUrl/topics/$topicId/photos?client_id=$apiKey&$per_page&page=$pageNumber';
-    http.Response response = await http.get(url);
+    http.Response response = await http.get(Uri.parse(url));
 
     List<UnPlashResponse> unPlashResponseList = [];
     if (response.statusCode == 200) {
@@ -64,7 +64,7 @@ class FetchImages {
 
   Future getTrendingImages(int pageNumber) async {
     String url = '$apiUrl&order_by=popular&$per_page&page=$pageNumber';
-    http.Response response = await http.get(url);
+    http.Response response = await http.get(Uri.parse(url));
 
     List<UnPlashResponse> unPlashResponseList = [];
     if (response.statusCode == 200) {
@@ -82,7 +82,7 @@ class FetchImages {
   Future getSearchedImages(int pageNumber, String query) async {
     String url =
         'https://api.unsplash.com/search/photos?client_id=$apiKey&$per_page&query=$query&page=$pageNumber';
-    http.Response response = await http.get(url);
+    http.Response response = await http.get(Uri.parse(url));
 
     List<UnPlashResponse> unPlashResponseList = [];
     if (response.statusCode == 200) {
