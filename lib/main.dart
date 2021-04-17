@@ -1,6 +1,6 @@
 import 'package:chitrwallpaperapp/helper/theme.dart';
 import 'package:chitrwallpaperapp/provider/favImageProvider.dart';
-import 'package:chitrwallpaperapp/screens/mainHomeScreen.dart';
+import 'package:chitrwallpaperapp/screens/mainHomeScreen/mainHomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';

@@ -25,6 +25,12 @@ class Helper {
     return cellCount;
   }
 
+  getPlatformType(context) {
+    var mediaQuery = MediaQuery.of(context);
+    DeviceScreenType deviceScreenType = getDeviceType(mediaQuery);
+    return deviceScreenType;
+  }
+
   dismissKeyBoard(BuildContext context) {
     FocusScope.of(context).requestFocus(new FocusNode());
   }

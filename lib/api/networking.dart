@@ -6,7 +6,7 @@ import 'dart:convert';
 const apiKey = "jRBzm2zUw2eoIPSHZxLvY_hnSh0P8J91P2THDay4y8w";
 const apiUrl = 'https://api.unsplash.com/photos?client_id=$apiKey';
 const mainUrl = 'https://api.unsplash.com';
-const per_page = "per_page=30";
+const per_page = "per_page=60";
 
 class FetchImages {
   Future getLatestImages(int pageNumber) async {
