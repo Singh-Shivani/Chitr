@@ -3,6 +3,7 @@ import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/modal/topic.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:chitrwallpaperapp/widget/gradientAppBar.dart';
+import 'package:chitrwallpaperapp/widget/loadingIndicator.dart';
 import 'package:chitrwallpaperapp/widget/loadingView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -97,16 +98,7 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
                   itemCount: unPlashResponse.length + 1,
                   itemBuilder: (BuildContext context, int index) {
                     if (index == unPlashResponse.length) {
-                      return Center(
-                        child: Center(
-                          child: Container(
-                            margin: EdgeInsets.only(top: 24),
-                            width: 30,
-                            height: 30,
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                      );
+                      return LoadingIndicator();
                     } else {
                       UnPlashResponse item = unPlashResponse[index];
                       return GestureDetector(

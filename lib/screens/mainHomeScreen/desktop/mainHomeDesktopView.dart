@@ -3,7 +3,6 @@ import 'package:chitrwallpaperapp/modal/deskTopDrawerModal.dart';
 import 'package:chitrwallpaperapp/widget/appAboutDialog.dart';
 import 'package:chitrwallpaperapp/widget/chitrGradientText.dart';
 import 'package:flutter/material.dart';
-import 'package:gradient_text/gradient_text.dart';
 import '../../searchedImagePage.dart';
 
 class MainHomeDesktopView extends StatelessWidget {

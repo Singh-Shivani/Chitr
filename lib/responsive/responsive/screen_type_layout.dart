@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 import 'package:chitrwallpaperapp/responsive/enums/device_screen_type.dart';
 import 'package:chitrwallpaperapp/responsive/responsive/responsive_builder.dart';
 import 'package:flutter/material.dart';
@@ -24,9 +23,7 @@ class ScreenTypeLayout extends StatelessWidget {
       }
 
       // If sizing indicates desktop and we have a desktop widget then return
-      if (sizingInformation.deviceScreenType == DeviceScreenType.Desktop ||
-          Platform.isWindows ||
-          Platform.isMacOS) {
+      if (sizingInformation.deviceScreenType == DeviceScreenType.Desktop) {
         if (desktop != null) {
           return desktop;
         }

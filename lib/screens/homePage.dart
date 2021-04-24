@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:chitrwallpaperapp/helper/helper.dart';
+import 'package:chitrwallpaperapp/modal/appError.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
+import 'package:chitrwallpaperapp/widget/errorScreen.dart';
+import 'package:chitrwallpaperapp/widget/loadingIndicator.dart';
 import 'package:chitrwallpaperapp/widget/loadingView.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
@@ -10,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../api/networking.dart';
+import '../helper/helper.dart';
 import 'imageView.dart';
 import 'package:chitrwallpaperapp/const/constants.dart' as Constants;
 
@@ -25,23 +29,31 @@ class _HomePageState extends State<HomePage>
   List<UnPlashResponse> unPlashResponse = [];
   ScrollController _scrollController = ScrollController();
   bool isOffline = false;
-
+  ApiError apiError;
   StreamSubscription _connectionChangeStream;
 
   void getLatestImages(int pageNumber) async {
+    setState(() {
+      apiError = null;
+    });
     if (isOffline && await Helper().hasConnection() != true) {
       getLocalSavedData();
       return;
     } else {
       try {
         var data = await FetchImages().getLatestImages(pageNumber);
-        setState(() {
-          unPlashResponse = data;
-        });
-        saveDataToLocal(json.encode(data));
+        if (data is List<UnPlashResponse>) {
+          setState(() {
+            unPlashResponse = data;
+          });
+          saveDataToLocal(json.encode(data));
+        } else {
+          setState(() {
+            apiError = data;
+          });
+        }
       } catch (e) {
         getLocalSavedData();
-
         print(e);
       }
     }
@@ -57,9 +69,7 @@ class _HomePageState extends State<HomePage>
           unPlashResponse.add(item);
         });
       }
-    } else {
-      // Helper().showToast("No Offine Data To Show");
-    }
+    } else {}
   }
 
   void saveDataToLocal(String data) {
@@ -114,9 +124,14 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     var cellNumber = Helper().getMobileOrientation(context);
     return unPlashResponse.length == 0
-        ? LoadingView(
-            isSliver: false,
-          )
+        ? apiError == null
+            ? LoadingView(
+                isSliver: false,
+              )
+            : ErrorScreen(
+                errorMessage: apiError.errors[0],
+                tryAgain: getLatestImages,
+              )
         : StaggeredGridView.countBuilder(
             padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
             crossAxisCount: cellNumber,
@@ -124,14 +139,7 @@ class _HomePageState extends State<HomePage>
             itemCount: unPlashResponse.length + 1,
             itemBuilder: (BuildContext context, int index) {
               if (index == unPlashResponse.length) {
-                return Center(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 24),
-                    width: 30,
-                    height: 30,
-                    child: CircularProgressIndicator(),
-                  ),
-                );
+                return LoadingIndicator();
               } else {
                 UnPlashResponse item = unPlashResponse[index];
                 return GestureDetector(

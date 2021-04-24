@@ -89,4 +89,12 @@ class Helper {
       return rng.nextInt(10);
     }
   }
+
+  bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    // ignore: deprecated_member_use
+    return double.parse(s, (e) => null) != null;
+  }
 }

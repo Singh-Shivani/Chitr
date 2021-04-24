@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
+import 'package:chitrwallpaperapp/widget/loadingIndicator.dart';
 import 'package:chitrwallpaperapp/widget/loadingView.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
@@ -123,14 +124,7 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
             itemCount: unPlashResponse.length + 1,
             itemBuilder: (BuildContext context, int index) {
               if (index == unPlashResponse.length) {
-                return Center(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 24),
-                    width: 30,
-                    height: 30,
-                    child: CircularProgressIndicator(),
-                  ),
-                );
+                return LoadingIndicator();
               } else {
                 UnPlashResponse item = unPlashResponse[index];
                 return GestureDetector(

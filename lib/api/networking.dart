@@ -1,3 +1,5 @@
+import 'package:chitrwallpaperapp/helper/errorHandling.dart';
+import 'package:chitrwallpaperapp/modal/appError.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/modal/topic.dart';
 import 'package:http/http.dart' as http;
@@ -6,13 +8,14 @@ import 'dart:convert';
 const apiKey = "jRBzm2zUw2eoIPSHZxLvY_hnSh0P8J91P2THDay4y8w";
 const apiUrl = 'https://api.unsplash.com/photos?client_id=$apiKey';
 const mainUrl = 'https://api.unsplash.com';
-const per_page = "per_page=60";
+const per_page = "per_page=30";
 
 class FetchImages {
   Future getLatestImages(int pageNumber) async {
+    http.Response response;
     String url =
         '$apiUrl&order_by=latest&orientation=portrait&&=15&$per_page&page=$pageNumber';
-    http.Response response = await http.get(Uri.parse(url));
+    response = await http.get(Uri.parse(url));
 
     List<UnPlashResponse> unPlashResponseList = [];
     if (response.statusCode == 200) {
@@ -21,10 +24,12 @@ class FetchImages {
         UnPlashResponse unPlashResponse = new UnPlashResponse.fromJson(data[i]);
         unPlashResponseList.add(unPlashResponse);
       }
+      return unPlashResponseList;
     } else {
-      print(response.statusCode);
+      print("API ERRRRR");
+      // return response;
+      return showError(response);
     }
-    return unPlashResponseList;
   }
 
   Future getCategory() async {
@@ -97,5 +102,15 @@ class FetchImages {
       print(response.statusCode);
     }
     return unPlashResponseList;
+  }
+
+  //Thor Error
+
+  showError(
+    http.Response response,
+  ) {
+    if (response.statusCode != 500) {
+      return ErrorHadling().apiErrorHadling(response);
+    }
   }
 }

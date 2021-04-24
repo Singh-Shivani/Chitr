@@ -41,7 +41,6 @@ class _MainHomePageState extends State<MainHomePage> {
   }
 
   onTap(int pageIndex, context) {
-    print("hHH");
     if (Helper().getPlatformType(context) == DeviceScreenType.Desktop) {
       setState(() {
         selectedIndex = pageIndex;
