@@ -9,6 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../api/networking.dart';
+import '../modal/appError.dart';
+import '../widget/errorScreen.dart';
 import 'imageView.dart';
 
 class TopicImagesScreen extends StatefulWidget {
@@ -24,24 +26,43 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
   int pageNumber = 1;
   List<UnPlashResponse> unPlashResponse = [];
   var _textController = TextEditingController();
-
+  ApiError apiError;
   ScrollController _scrollController = ScrollController();
+  bool loadMore = true;
 
   void getTopic(String topicId) async {
+    setState(() {
+      apiError = null;
+    });
     try {
       var data = await FetchImages().getTopicImage(pageNumber, topicId);
-      setState(() {
-        unPlashResponse.addAll(data);
-      });
+      if (data is List<UnPlashResponse>) {
+        setState(() {
+          unPlashResponse = data;
+        });
+      } else {
+        setState(() {
+          apiError = data;
+        });
+      }
     } catch (e) {
       print(e);
     }
   }
 
   void loadMoreImages(String topicId) async {
+    if (loadMore == false) {
+      return;
+    }
     try {
       pageNumber = pageNumber + 1;
       var data = await FetchImages().getTopicImage(pageNumber, topicId);
+      if (data.isEmpty) {
+        setState(() {
+          loadMore = false;
+        });
+        return;
+      }
       setState(() {
         unPlashResponse.addAll(data);
       });
@@ -54,7 +75,6 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
   void initState() {
     super.initState();
     getTopic(widget.topics.id);
-
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -89,16 +109,22 @@ class _TopicImagesScreenState extends State<TopicImagesScreen> {
             width: widget.topics.coverPhoto.width,
           ),
           unPlashResponse.length == 0
-              ? SliverFillRemaining(
-                  child: LoadingView(
-                  isSliver: false,
-                ))
+              ? apiError == null
+                  ? LoadingView(
+                      isSliver: true,
+                    )
+                  : ErrorScreen(
+                      errorMessage: apiError.errors[0],
+                      tryAgain: getTopic,
+                    )
               : SliverStaggeredGrid.countBuilder(
                   crossAxisCount: cellNumber,
                   itemCount: unPlashResponse.length + 1,
                   itemBuilder: (BuildContext context, int index) {
                     if (index == unPlashResponse.length) {
-                      return LoadingIndicator();
+                      return LoadingIndicator(
+                        isLoading: loadMore,
+                      );
                     } else {
                       UnPlashResponse item = unPlashResponse[index];
                       return GestureDetector(

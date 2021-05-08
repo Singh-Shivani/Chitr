@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
@@ -11,6 +10,8 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../api/networking.dart';
+import '../modal/appError.dart';
+import '../widget/errorScreen.dart';
 import 'imageView.dart';
 import 'package:chitrwallpaperapp/const/constants.dart' as Constants;
 
@@ -27,18 +28,28 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
   bool isOffline = false;
   StreamSubscription _connectionChangeStream;
   ScrollController _scrollController = ScrollController();
+  ApiError apiError;
 
   void getTrendingImages(int pageNumber) async {
     if (isOffline && await Helper().hasConnection() != true) {
       getLocalSavedData();
       return;
     }
+    setState(() {
+      apiError = null;
+    });
     try {
       var data = await FetchImages().getTrendingImages(pageNumber);
-      setState(() {
-        unPlashResponse = data;
-      });
-      saveDataToLocal(json.encode(data));
+      if (data is List<UnPlashResponse>) {
+        setState(() {
+          unPlashResponse = data;
+        });
+        saveDataToLocal(json.encode(data));
+      } else {
+        setState(() {
+          apiError = data;
+        });
+      }
     } catch (e) {
       getLocalSavedData();
       print(e);
@@ -113,9 +124,14 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
   Widget build(BuildContext context) {
     var cellNumber = Helper().getMobileOrientation(context);
     return unPlashResponse.length == 0
-        ? LoadingView(
-            isSliver: false,
-          )
+        ? apiError == null
+            ? LoadingView(
+                isSliver: false,
+              )
+            : ErrorScreen(
+                errorMessage: apiError.errors[0],
+                tryAgain: getTrendingImages,
+              )
         : StaggeredGridView.countBuilder(
             padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
             crossAxisCount: cellNumber,
@@ -124,7 +140,9 @@ class _TrendingWallpaperPageState extends State<TrendingWallpaperPage>
             itemCount: unPlashResponse.length + 1,
             itemBuilder: (BuildContext context, int index) {
               if (index == unPlashResponse.length) {
-                return LoadingIndicator();
+                return LoadingIndicator(
+                  isLoading: true,
+                );
               } else {
                 UnPlashResponse item = unPlashResponse[index];
                 return GestureDetector(

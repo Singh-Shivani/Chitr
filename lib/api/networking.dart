@@ -1,5 +1,4 @@
 import 'package:chitrwallpaperapp/helper/errorHandling.dart';
-import 'package:chitrwallpaperapp/modal/appError.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
 import 'package:chitrwallpaperapp/modal/topic.dart';
 import 'package:http/http.dart' as http;
@@ -26,8 +25,6 @@ class FetchImages {
       }
       return unPlashResponseList;
     } else {
-      print("API ERRRRR");
-      // return response;
       return showError(response);
     }
   }
@@ -43,10 +40,10 @@ class FetchImages {
         Topics topics = new Topics.fromJson(data[i]);
         topicsList.add(topics);
       }
+      return topicsList;
     } else {
-      print(response.statusCode);
+      return showError(response);
     }
-    return topicsList;
   }
 
   Future getTopicImage(int pageNumber, String topicId) async {
@@ -61,10 +58,10 @@ class FetchImages {
         UnPlashResponse unPlashResponse = new UnPlashResponse.fromJson(data[i]);
         unPlashResponseList.add(unPlashResponse);
       }
+      return unPlashResponseList;
     } else {
-      print(response.statusCode);
+      return showError(response);
     }
-    return unPlashResponseList;
   }
 
   Future getTrendingImages(int pageNumber) async {
@@ -78,10 +75,10 @@ class FetchImages {
         UnPlashResponse unPlashResponse = new UnPlashResponse.fromJson(data[i]);
         unPlashResponseList.add(unPlashResponse);
       }
+      return unPlashResponseList;
     } else {
-      print(response.statusCode);
+      return showError(response);
     }
-    return unPlashResponseList;
   }
 
   Future getSearchedImages(int pageNumber, String query) async {
@@ -98,10 +95,10 @@ class FetchImages {
             new UnPlashResponse.fromJson(data['results'][i]);
         unPlashResponseList.add(unPlashResponse);
       }
+      return unPlashResponseList;
     } else {
-      print(response.statusCode);
+      return showError(response);
     }
-    return unPlashResponseList;
   }
 
   //Thor Error

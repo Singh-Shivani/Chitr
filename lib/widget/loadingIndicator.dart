@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
 class LoadingIndicator extends StatelessWidget {
-  const LoadingIndicator({Key key}) : super(key: key);
+  final bool isLoading;
+  const LoadingIndicator({Key key, @required this.isLoading}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
         margin: EdgeInsets.only(top: 24),
-        width: 30,
+        width: double.infinity,
         height: 30,
-        child: CircularProgressIndicator(),
+        child: isLoading
+            ? CircularProgressIndicator()
+            : Center(child: Text("No Image Found")),
       ),
     );
   }

@@ -33,7 +33,7 @@ dependencies:
   progress_indicators: ^0.1.5
   flutter_html:
   flutter_native_splash: 0.3.2
-  shimmer: ^1.1.2
+  flutter_statusbarcolor: ^0.2.3
 
 flutter_native_splash:
   color: "#ffffff"

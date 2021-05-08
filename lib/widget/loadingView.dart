@@ -58,7 +58,9 @@ class _LoadingViewState extends State<LoadingView> {
             itemCount: loading.length,
             itemBuilder: (BuildContext context, int index) {
               LoadingElement loadingElement = loading[index];
-              return loadingItem(loadingElement, index);
+              return Container(
+                  margin: EdgeInsets.only(left: 4.0, right: 4.0, top: 8),
+                  child: loadingItem(loadingElement, index));
             },
             staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
           )

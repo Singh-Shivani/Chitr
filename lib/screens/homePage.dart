@@ -139,7 +139,9 @@ class _HomePageState extends State<HomePage>
             itemCount: unPlashResponse.length + 1,
             itemBuilder: (BuildContext context, int index) {
               if (index == unPlashResponse.length) {
-                return LoadingIndicator();
+                return LoadingIndicator(
+                  isLoading: true,
+                );
               } else {
                 UnPlashResponse item = unPlashResponse[index];
                 return GestureDetector(

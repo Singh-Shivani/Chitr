@@ -23,14 +23,25 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
   FocusNode searchFocusNode;
   ScrollController _scrollController = ScrollController();
   bool _loading = false;
-  void getSearchedImages(
-    int pageNumber,
-  ) async {
+  bool loadMore = true;
+
+  void getSearchedImages(int pageNumber) async {
+    if (loadMore == false) {
+      return;
+    }
     try {
       var data = await FetchImages()
           .getSearchedImages(pageNumber, _textController.text);
+      if (data.isEmpty) {
+        setState(() {
+          loadMore = false;
+        });
+        Helper().showToast("No Images Found");
+        return;
+      }
       setState(() {
         unPlashResponse.addAll(data);
+        loadMore = true;
         _loading = false;
       });
     } catch (e) {
@@ -42,9 +53,18 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
   }
 
   void loadMoreImages(String query) async {
+    if (loadMore == false) {
+      return;
+    }
     try {
       pageNumber = pageNumber + 1;
       var data = await FetchImages().getSearchedImages(pageNumber, query);
+      if (data.isEmpty) {
+        setState(() {
+          loadMore = false;
+        });
+        return;
+      }
       setState(() {
         unPlashResponse.addAll(data);
       });
@@ -124,6 +144,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                           setState(() {
                             searchText = "";
                             unPlashResponse.clear();
+                            loadMore = true;
                           });
                         },
                         icon: Icon(
@@ -135,7 +156,7 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                   ),
                 ),
               ),
-              (searchText == null || searchText.isEmpty)
+              (searchText == null || searchText.isEmpty || !loadMore)
                   ? SliverFillRemaining(
                       child: Center(
                           child: Icon(
@@ -154,7 +175,9 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                           itemCount: unPlashResponse.length + 1,
                           itemBuilder: (BuildContext context, int index) {
                             if (index == unPlashResponse.length) {
-                              return LoadingIndicator();
+                              return LoadingIndicator(
+                                isLoading: loadMore,
+                              );
                             } else {
                               UnPlashResponse item = unPlashResponse[index];
                               return GestureDetector(
