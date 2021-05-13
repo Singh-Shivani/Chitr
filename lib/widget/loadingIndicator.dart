@@ -9,7 +9,7 @@ class LoadingIndicator extends StatelessWidget {
     return Center(
       child: Container(
         margin: EdgeInsets.only(top: 24),
-        width: double.infinity,
+        width: isLoading ? 30 : double.infinity,
         height: 30,
         child: isLoading
             ? CircularProgressIndicator()

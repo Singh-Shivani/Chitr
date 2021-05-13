@@ -7,9 +7,11 @@ ThemeData light = ThemeData(
 );
 
 ThemeData dark = ThemeData(
-  brightness: Brightness.dark,
-  primarySwatch: Colors.deepPurple,
-);
+    brightness: Brightness.dark,
+    toggleableActiveColor: Colors.deepPurple,
+    accentColor: Colors.deepPurple,
+    primarySwatch: Colors.deepPurple,
+    scaffoldBackgroundColor: Colors.black);
 
 class ThemeNotifier extends ChangeNotifier {
   final String key = "theme";

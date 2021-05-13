@@ -149,14 +149,13 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                         },
                         icon: Icon(
                           Icons.clear,
-                          color: Color.fromRGBO(13, 26, 59, 1),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-              (searchText == null || searchText.isEmpty || !loadMore)
+              (searchText == null || searchText.isEmpty)
                   ? SliverFillRemaining(
                       child: Center(
                           child: Icon(
