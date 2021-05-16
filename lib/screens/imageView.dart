@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_text/gradient_text.dart';
+import 'package:octo_image/octo_image.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:image_downloader/image_downloader.dart';
 import 'package:provider/provider.dart';
@@ -150,32 +151,29 @@ class _ImageViewState extends State<ImageView> {
             Hero(
               tag: widget.unPlashResponse.id,
               child: InteractiveViewer(
-                child: CachedNetworkImage(
-                  imageUrl: widget.unPlashResponse.urls.small,
-                  imageBuilder: (context, imageProvider) => Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.contain,
-                      ),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: OctoImage(
+                    image: CachedNetworkImageProvider(
+                      widget.unPlashResponse.urls.small,
                     ),
+                    placeholderBuilder: (context) => Center(
+                      child: GradientText("Chitr",
+                          gradient: LinearGradient(colors: [
+                            Color.fromRGBO(254, 225, 64, 1),
+                            Color.fromRGBO(245, 87, 108, 1),
+                          ]),
+                          style: TextStyle(
+                            fontSize: 47,
+                            fontFamily: 'DancingScript',
+                            letterSpacing: 1,
+                          ),
+                          textAlign: TextAlign.center),
+                    ),
+                    errorBuilder: OctoError.icon(color: Colors.red),
+                    fit: BoxFit.contain,
                   ),
-                  placeholder: (context, url) => Center(
-                    child: GradientText("Chitr",
-                        gradient: LinearGradient(colors: [
-                          Color.fromRGBO(254, 225, 64, 1),
-                          Color.fromRGBO(245, 87, 108, 1),
-                        ]),
-                        style: TextStyle(
-                          fontSize: 47,
-                          fontFamily: 'DancingScript',
-                          letterSpacing: 1,
-                        ),
-                        textAlign: TextAlign.center),
-                  ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
             ),
