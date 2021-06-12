@@ -1,13 +1,13 @@
-import 'dart:math';
-
 import 'package:chitrwallpaperapp/responsive/enums/device_screen_type.dart';
 import 'package:chitrwallpaperapp/responsive/utils/ui_utils.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'dart:math';
+import 'dart:convert';
 import '../responsive/enums/device_screen_type.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 class Helper {
   getMobileOrientation(context) {
@@ -96,5 +96,20 @@ class Helper {
     }
     // ignore: deprecated_member_use
     return double.parse(s, (e) => null) != null;
+  }
+
+  String getFileName(int len) {
+    var random = Random.secure();
+    var values = List<int>.generate(len, (i) => random.nextInt(255));
+    return base64UrlEncode(values) + ".png";
+  }
+
+  Future<String> getFilePath() async {
+    final PathProviderPlatform provider = PathProviderPlatform.instance;
+    try {
+      return await provider.getDownloadsPath();
+    } catch (exception) {
+      return null;
+    }
   }
 }

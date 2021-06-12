@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chitrwallpaperapp/database/dataBaseHelper/database_helper.dart';
 import 'package:chitrwallpaperapp/database/data_modal/favImage.dart';
@@ -8,13 +9,15 @@ import 'package:chitrwallpaperapp/provider/favImageProvider.dart';
 import 'package:chitrwallpaperapp/widget/appDialogs.dart';
 import 'package:chitrwallpaperapp/widget/cartModaleView.dart';
 import 'package:chitrwallpaperapp/widget/imageViewAppBar.dart';
+import 'package:chitrwallpaperapp/widget/inAppNotificaion.dart';
+import 'package:flowder/flowder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:octo_image/octo_image.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:image_downloader/image_downloader.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import 'package:http/http.dart' as http;
@@ -35,26 +38,32 @@ class _ImageViewState extends State<ImageView> {
   List<DownloadOption> downloadOptionList = [];
   downloadImage(String imageUrl) async {
     try {
-      var imageId = await ImageDownloader.downloadImage(
-        imageUrl,
-        destination: AndroidDestinationType.directoryPictures,
-      );
-      if (imageId == null) {}
-      showOverlayNotification((context) {
-        return CustomNotificationOnPage(
-          icon: Icons.done,
-          iconColor: Colors.green,
-          subTitle: 'Downloaded',
+      if (Platform.isMacOS || Platform.isWindows) {
+        var path = (await getDownloadsDirectory()).path;
+        print(path);
+        var options = DownloaderUtils(
+          progressCallback: (current, total) {
+            final progress = (current / total) * 100;
+            print('Downloading: $progress');
+          },
+          file: File('$path/' + Helper().getFileName(5)),
+          progress: ProgressImplementation(),
+          onDone: () => print('COMPLETE'),
+          deleteOnCancel: true,
         );
-      }, duration: Duration(milliseconds: 3000));
+        await Flowder.download(imageUrl, options);
+      } else {
+        var imageId = await ImageDownloader.downloadImage(
+          imageUrl,
+          destination: AndroidDestinationType.directoryPictures,
+        );
+        if (imageId == null) {}
+        InAppNotification().imageDownloaded(
+            context, Icons.done, Theme.of(context).accentColor, 'Downloaded');
+      }
     } on PlatformException catch (error) {
-      showOverlayNotification((context) {
-        return CustomNotificationOnPage(
-          icon: Icons.error_outline,
-          iconColor: Colors.red,
-          subTitle: "Sorry, couldn't download",
-        );
-      }, duration: Duration(milliseconds: 3000));
+      InAppNotification().imageDownloaded(
+          context, Icons.error_outline, Colors.red, "Sorry, couldn't download");
       print(error);
     }
   }
@@ -103,21 +112,11 @@ class _ImageViewState extends State<ImageView> {
         widget.unPlashResponse.blurHash,
       );
       favImageProvider.addImageToFav(favImage);
-      showOverlayNotification((context) {
-        return CustomNotificationOnPage(
-          icon: Icons.favorite,
-          iconColor: Color.fromRGBO(245, 7, 59, 1),
-          subTitle: 'Image added in your Favourites.',
-        );
-      }, duration: Duration(milliseconds: 3000));
+      InAppNotification().imageDownloaded(context, Icons.favorite,
+          Color.fromRGBO(245, 7, 59, 1), 'Image added in your Favourites.');
     } else {
-      showOverlayNotification((context) {
-        return CustomNotificationOnPage(
-          icon: Icons.favorite,
-          iconColor: Colors.black,
-          subTitle: 'Image is already added to your Favourites.',
-        );
-      }, duration: Duration(milliseconds: 3000));
+      InAppNotification().imageDownloaded(context, Icons.favorite, Colors.black,
+          'Image is already added to your Favourites.');
     }
   }
 
@@ -202,48 +201,6 @@ class _ImageViewState extends State<ImageView> {
         },
         child: Icon(
           Icons.download_sharp,
-        ),
-      ),
-    );
-  }
-}
-
-class CustomNotificationOnPage extends StatelessWidget {
-  final String subTitle;
-  final Color iconColor;
-  final IconData icon;
-  CustomNotificationOnPage(
-      {@required this.subTitle, @required this.iconColor, @required this.icon});
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 4),
-        child: SafeArea(
-          child: ListTile(
-            leading: SizedBox.fromSize(
-              size: Size(40, 40),
-              child: Icon(
-                icon,
-                color: iconColor,
-                size: 30,
-              ),
-            ),
-            title: Text(
-              'Chitr',
-              style: TextStyle(
-                  fontFamily: 'DancingScript',
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                  fontSize: 20),
-            ),
-            subtitle: Text(subTitle),
-            trailing: IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  OverlaySupportEntry.of(context).dismiss();
-                }),
-          ),
         ),
       ),
     );

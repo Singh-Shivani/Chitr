@@ -35,6 +35,8 @@ dependencies:
   flutter_native_splash: ^1.1.8+4
   flutter_statusbarcolor: ^0.2.3
   octo_image: ^1.0.0+1
+  path_provider: ^2.0.2
+  flowder: ^0.2.0
 
 flutter_native_splash:
   color: "#ffffff"

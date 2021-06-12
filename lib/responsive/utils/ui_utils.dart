@@ -1,10 +1,11 @@
 import 'package:chitrwallpaperapp/responsive/enums/device_screen_type.dart';
 import 'package:flutter/widgets.dart';
+import 'dart:io';
 
 DeviceScreenType getDeviceType(MediaQueryData mediaQuery) {
   double deviceWidth = mediaQuery.size.shortestSide;
 
-  if (deviceWidth > 950) {
+  if (Platform.isMacOS || Platform.isWindows) {
     return DeviceScreenType.Desktop;
   }
 
