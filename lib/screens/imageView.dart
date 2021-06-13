@@ -39,7 +39,9 @@ class _ImageViewState extends State<ImageView> {
   downloadImage(String imageUrl) async {
     try {
       if (Platform.isMacOS || Platform.isWindows) {
+        // var path = (await getApplicationSupportDirectory()).path;
         var path = (await getDownloadsDirectory()).path;
+
         print(path);
         var options = DownloaderUtils(
           progressCallback: (current, total) {
@@ -48,7 +50,8 @@ class _ImageViewState extends State<ImageView> {
           },
           file: File('$path/' + Helper().getFileName(5)),
           progress: ProgressImplementation(),
-          onDone: () => print('COMPLETE'),
+          onDone: () => InAppNotification().imageDownloaded(
+              context, Icons.done, Theme.of(context).accentColor, 'Downloaded'),
           deleteOnCancel: true,
         );
         await Flowder.download(imageUrl, options);

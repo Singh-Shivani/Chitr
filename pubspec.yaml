@@ -36,6 +36,7 @@ dependencies:
   flutter_statusbarcolor: ^0.2.3
   octo_image: ^1.0.0+1
   path_provider: ^2.0.2
+  path_provider_macos: ^2.0.0
   flowder: ^0.2.0
 
 flutter_native_splash:

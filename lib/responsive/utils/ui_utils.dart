@@ -5,7 +5,7 @@ import 'dart:io';
 DeviceScreenType getDeviceType(MediaQueryData mediaQuery) {
   double deviceWidth = mediaQuery.size.shortestSide;
 
-  if (Platform.isMacOS || Platform.isWindows) {
+  if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
     return DeviceScreenType.Desktop;
   }
 
