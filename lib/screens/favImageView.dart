@@ -4,6 +4,7 @@ import 'package:chitrwallpaperapp/database/data_modal/favImage.dart';
 import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/downloadOption.dart';
 import 'package:chitrwallpaperapp/provider/favImageProvider.dart';
+import 'package:chitrwallpaperapp/widget/CustomNotificationOnPage.dart';
 import 'package:chitrwallpaperapp/widget/appDialogs.dart';
 import 'package:chitrwallpaperapp/widget/cartModaleView.dart';
 import 'package:chitrwallpaperapp/widget/imageViewAppBar.dart';
@@ -188,46 +189,6 @@ class _FavImageViewState extends State<FavImageView> {
         },
         child: Icon(
           Icons.download_sharp,
-        ),
-      ),
-    );
-  }
-}
-
-class CustomNotificationOnPage extends StatelessWidget {
-  final String subTitle;
-  final Color iconColor;
-  final IconData icon;
-  CustomNotificationOnPage(
-      {@required this.subTitle, @required this.iconColor, @required this.icon});
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 4),
-      child: SafeArea(
-        child: ListTile(
-          leading: SizedBox.fromSize(
-            size: Size(40, 40),
-            child: Icon(
-              icon,
-              color: iconColor,
-              size: 30,
-            ),
-          ),
-          title: Text(
-            'Chitr',
-            style: TextStyle(
-                fontFamily: 'DancingScript',
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2,
-                fontSize: 20),
-          ),
-          subtitle: Text(subTitle),
-          trailing: IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                OverlaySupportEntry.of(context).dismiss();
-              }),
         ),
       ),
     );

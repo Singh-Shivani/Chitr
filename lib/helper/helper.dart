@@ -13,6 +13,8 @@ class Helper {
   getMobileOrientation(context) {
     int cellCount = 4;
     var mediaQuery = MediaQuery.of(context);
+    double deviceWidth = mediaQuery.size.shortestSide;
+    print(deviceWidth);
     DeviceScreenType deviceScreenType = getDeviceType(mediaQuery);
     var orientation = mediaQuery.orientation;
     if (deviceScreenType == DeviceScreenType.Mobile) {
@@ -20,10 +22,35 @@ class Helper {
     } else if (deviceScreenType == DeviceScreenType.Tablet) {
       cellCount = 8;
     } else if (deviceScreenType == DeviceScreenType.Desktop) {
-      cellCount = 18;
+      cellCount = responsiveNumGridTiles(mediaQuery);
     }
     return cellCount;
   }
+
+  int responsiveNumGridTiles(MediaQueryData mediaQuery) {
+    double deviceWidth = mediaQuery.size.width;
+    if (deviceWidth < 700) {
+      return 6;
+    } else if (deviceWidth < 1200) {
+      return 10;
+    } else if (deviceWidth < 1650) {
+      return 18;
+    } else {
+      return 18;
+    }
+  }
+//* OG Code to Test
+//   int responsiveNumGridTiles(MediaQueryData mediaQuery) {
+//   double deviceWidth = mediaQuery.size.width;
+//   if (deviceWidth < 700) {
+//     return 1;
+//   } else if (deviceWidth < 1200) {
+//     return 2;
+//   } else if (deviceWidth < 1650) {
+//     return 3;
+//   }
+//   return 4;
+// }
 
   getPlatformType(context) {
     var mediaQuery = MediaQuery.of(context);

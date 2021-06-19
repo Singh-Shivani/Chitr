@@ -1,4 +1,4 @@
-import 'package:chitrwallpaperapp/screens/favImageView.dart';
+import 'package:chitrwallpaperapp/widget/CustomNotificationOnPage.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 
