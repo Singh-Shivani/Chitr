@@ -50,8 +50,10 @@ class _ImageViewState extends State<ImageView> {
           },
           file: File('$path/' + Helper().getFileName(5)),
           progress: ProgressImplementation(),
-          onDone: () => InAppNotification().imageDownloaded(
-              context, Icons.done, Theme.of(context).accentColor, 'Downloaded'),
+          onDone: () {
+            return InAppNotification().imageDownloaded(context, Icons.done,
+                Theme.of(context).accentColor, 'Downloaded');
+          },
           deleteOnCancel: true,
         );
         await Flowder.download(imageUrl, options);
