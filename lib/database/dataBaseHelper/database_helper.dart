@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 
 class FavImageDatabaseHelper {
   static final _databaseName = "chitr.db";
-  static final _databaseVersion = 2;
+  static final _databaseVersion = 5;
 
   static final table = 'fav_images';
   static final columnId = 'id';
@@ -62,13 +62,9 @@ class FavImageDatabaseHelper {
     return await db.insert(table, row);
   }
 
-  // All of the rows are returned as a list of maps, where each map is
-  // a key-value list of columns.
   Future<List<Map<String, dynamic>>> queryAllRows() async {
-    // Database db = await instance.database;
-    // return await db.query(table);
     Database db = await instance.database;
-    // return await db.query(table);
+
     final ret =
         await db.rawQuery('SELECT * FROM $table ORDER BY $columnId DESC');
     return ret;
@@ -93,8 +89,7 @@ class FavImageDatabaseHelper {
     Database db = await instance.database;
     final ret =
         await db.rawQuery('SELECT * FROM $table WHERE $imageid=?', [query]);
-    // print("WOWOWO");
-    // print(ret);
+
     if (ret.length == 0) {
       return false;
     } else {

@@ -1,6 +1,6 @@
 import 'package:chitrwallpaperapp/helper/theme.dart';
 import 'package:chitrwallpaperapp/provider/favImageProvider.dart';
-import 'package:chitrwallpaperapp/screens/mainHomeScreen.dart';
+import 'package:chitrwallpaperapp/screens/mainHomeScreen/mainHomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           child: Consumer<ThemeNotifier>(
             builder: (context, ThemeNotifier notifier, child) {
               return MaterialApp(
-                title: 'Flutter Theme Provider',
+                title: 'Chitr',
                 theme: notifier.darkTheme ? dark : light,
                 home: MainHomePage(),
               );
