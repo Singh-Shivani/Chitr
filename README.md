@@ -27,7 +27,7 @@ All the images are fetched through [Unsplash API](https://unsplash.com/developer
 ## iOS Screens 📱
 
 <p align="center">
-<img src="App Images/ios/homePage.png" height="350"/> <img src="App Images/ios/imageAddedToFav.png" height="350" hspace="100"/> <img src="App Images/ios/emptySearchPage.png" height="350" /> <br><br>
+<img src="App Images/ios/homePage.png" height="350"/> <img src="App Images/ios/trendingPage.png" height="350" hspace="100"/> <img src="App Images/ios/searchPage.png" height="350" /> <br><br>
 <img src="App Images/ios/imageAddedToFav.png" height="350" /><img src="App Images/ios/FavImagesPage.png" height="350" hspace="110"/> <img src="App Images/ios/viewLicense.png" height="350" />
 </p>
 
