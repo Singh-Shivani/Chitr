@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chitrwallpaperapp/responsive/enums/device_screen_type.dart';
 import 'package:chitrwallpaperapp/responsive/responsive/responsive_builder.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,9 @@ class ScreenTypeLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return ResponsiveBuilder(builder: (context, sizingInformation) {
       // If sizing indicates Tablet and we have a tablet widget then return
+      if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+        return desktop;
+      }
       if (sizingInformation.deviceScreenType == DeviceScreenType.Tablet) {
         if (tablet != null) {
           return tablet;
