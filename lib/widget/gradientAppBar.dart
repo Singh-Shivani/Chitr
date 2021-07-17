@@ -33,7 +33,10 @@ class AppAppbar extends StatelessWidget {
     DeviceScreenType deviceScreenType = getDeviceType(mediaQuery);
     return SliverAppBar(
       expandedHeight: 364,
-      pinned: deviceScreenType == DeviceScreenType.Tablet ? true : false,
+      pinned: deviceScreenType == DeviceScreenType.Tablet ||
+              deviceScreenType == DeviceScreenType.Desktop
+          ? true
+          : false,
       title: Text(title),
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,

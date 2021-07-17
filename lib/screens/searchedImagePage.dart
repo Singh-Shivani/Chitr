@@ -1,5 +1,7 @@
 import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
+import 'package:chitrwallpaperapp/responsive/enums/device_screen_type.dart';
+import 'package:chitrwallpaperapp/responsive/utils/ui_utils.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
 import 'package:chitrwallpaperapp/widget/dismissKeyBoardView.dart';
 import 'package:chitrwallpaperapp/widget/loadingIndicator.dart';
@@ -100,6 +102,8 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
   @override
   Widget build(BuildContext context) {
     var cellNumber = Helper().getMobileOrientation(context);
+    var mediaQuery = MediaQuery.of(context);
+    DeviceScreenType deviceScreenType = getDeviceType(mediaQuery);
     return Scaffold(
       body: DismissKeyBoardView(
         child: NotificationListener<ScrollNotification>(
@@ -113,6 +117,10 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
             controller: _scrollController,
             slivers: <Widget>[
               SliverAppBar(
+                pinned: deviceScreenType == DeviceScreenType.Tablet ||
+                        deviceScreenType == DeviceScreenType.Desktop
+                    ? true
+                    : false,
                 floating: true,
                 title: Container(
                   margin: EdgeInsets.symmetric(vertical: 12),
