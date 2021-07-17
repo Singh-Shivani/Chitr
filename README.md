@@ -34,8 +34,15 @@ All the images are fetched through [Unsplash API](https://unsplash.com/developer
 ## MacOS 💻
 
 <p>
-<img src="App Images/macos/2.png" height="350" hspace="100"/> 
+<img src="App Images/macos/2.jpeg" height="350" hspace="100"/> 
 </p>
+
+## In action 👀
+
+<p align="center">
+  <img src="App Images/app.gif" height="550"/>
+ </p>
+ 
 
 <h3>Stay Healthy!✨Stay Safe!🖖</h3>
 
