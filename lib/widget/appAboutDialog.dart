@@ -8,7 +8,7 @@ class AppAboutDialog {
     showAboutDialog(
         context: context,
         applicationName: 'Chitr',
-        applicationVersion: 'by Shivani Singh\n\nV1.0',
+        applicationVersion: 'by Shivani Singh\n\nV2.0',
         applicationLegalese: 'All images are provided by unsplash.com',
         children: [
           Consumer<ThemeNotifier>(
