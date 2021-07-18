@@ -3,6 +3,7 @@ import 'package:chitrwallpaperapp/modal/deskTopDrawerModal.dart';
 import 'package:chitrwallpaperapp/widget/appAboutDialog.dart';
 import 'package:chitrwallpaperapp/widget/chitrGradientText.dart';
 import 'package:flutter/material.dart';
+import 'package:glass_kit/glass_kit.dart';
 import '../../searchedImagePage.dart';
 
 class MainHomeDesktopView extends StatelessWidget {
@@ -19,38 +20,53 @@ class MainHomeDesktopView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
       key: scaffoldKey,
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: ChitrGradientText(),
-              decoration: BoxDecoration(
-                color: Theme.of(context).accentColor,
-              ),
+      drawer: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: Colors.transparent,
+        ),
+        child: Drawer(
+          child: GlassContainer.clearGlass(
+            borderWidth: 0.0,
+            elevation: 0,
+            height: double.infinity,
+            width: 300,
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(child: ChitrGradientText()),
+                ...desktopTabs
+                    .asMap()
+                    .map((int i, DesktopDrawer element) => MapEntry(
+                        i,
+                        ListTile(
+                          leading: Icon(
+                            element.icon,
+                            color: Colors.white,
+                          ),
+                          title: Text(
+                            element.title.toUpperCase(),
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          onTap: () {
+                            if (i == 4) {
+                              AppAboutDialog().showAppAboutDialog(context);
+                            } else {
+                              //scaffoldKey.currentState.openDrawer(),
+                              onTap(i, context);
+                              scaffoldKey.currentState.openEndDrawer();
+                            }
+                          },
+                        )))
+                    .values
+                    .toList()
+              ],
             ),
-            ...desktopTabs
-                .asMap()
-                .map((int i, DesktopDrawer element) => MapEntry(
-                    i,
-                    ListTile(
-                      leading: Icon(element.icon),
-                      title: Text(element.title.toUpperCase()),
-                      onTap: () {
-                        if (i == 4) {
-                          AppAboutDialog().showAppAboutDialog(context);
-                        } else {
-                          //scaffoldKey.currentState.openDrawer(),
-                          onTap(i, context);
-                          scaffoldKey.currentState.openEndDrawer();
-                        }
-                      },
-                    )))
-                .values
-                .toList()
-          ],
+          ),
         ),
       ),
       appBar: AppBar(

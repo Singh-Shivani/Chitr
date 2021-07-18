@@ -38,6 +38,8 @@ dependencies:
   path_provider: ^2.0.2
   path_provider_macos: ^2.0.0
   flowder: ^0.2.0
+  glass_kit: ^2.0.1
+
 
 flutter_native_splash:
   color: "#ffffff"
