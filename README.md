@@ -17,17 +17,30 @@ Chitr provides all the basic requirements needed in a wallpaper app, like latest
 
 All the images are fetched through [Unsplash API](https://unsplash.com/developers) which gives realtime service so that you get the latest collections!🤩
 
-## Screens 📱
+## Android Screens 📱
 
 <p align="center">
-<img src="App Images/homePage.png" height="350"/> <img src="App Images/trendingPage.png" height="350" hspace="100"/> <img src="App Images/searchPage.png" height="350" /> <br><br>
-<img src="App Images/imageAddedToFav.png" height="350" /><img src="App Images/FavImagesPage.png" height="350" hspace="110"/> <img src="App Images/viewLicense.png" height="350" />
+<img src="App Images/android/homePage.png" height="350"/> <img src="App Images/android/trendingPage.png" height="350" hspace="100"/> <img src="App Images/android/searchPage.png" height="350" /> <br><br>
+<img src="App Images/android/imageAddedToFav.png" height="350" /><img src="App Images/android/FavImagesPage.png" height="350" hspace="110"/> <img src="App Images/android/viewLicense.png" height="350" />
+</p>
+
+## iOS Screens 📱
+
+<p align="center">
+<img src="App Images/ios/homePage.png" height="350"/> <img src="App Images/ios/trendingPage.png" height="350" hspace="100"/> <img src="App Images/ios/searchPage.png" height="350" /> <br><br>
+<img src="App Images/ios/imageAddedToFav.png" height="350" /><img src="App Images/ios/FavImagesPage.png" height="350" hspace="110"/> <img src="App Images/ios/viewLicense.png" height="350" />
+</p>
+
+## MacOS 💻
+
+<p>
+<img src="App Images/macos/2.jpeg" height="350" hspace="100"/> 
 </p>
 
 ## In action 👀
 
 <p align="center">
-  <img src="chitr.gif" height="550"/>
+  <img src="App Images/app.gif" height="550"/>
  </p>
  
 

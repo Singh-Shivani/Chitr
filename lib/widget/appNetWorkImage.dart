@@ -1,41 +1,36 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:octo_image/octo_image.dart';
 
 class AppNetWorkImage extends StatelessWidget {
   final String imageUrl;
-  final String blur_hash;
-  final String userName;
+  final String blurHash;
+  final int width;
+  final int height;
 
-  const AppNetWorkImage(
-      {Key key,
-      @required this.imageUrl,
-      @required this.blur_hash,
-      @required this.userName})
-      : super(key: key);
+  const AppNetWorkImage({
+    Key key,
+    @required this.imageUrl,
+    @required this.blurHash,
+    @required this.width,
+    @required this.height,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        CachedNetworkImage(
-          imageUrl: imageUrl,
-          imageBuilder: (context, imageProvider) => Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
-              ),
-            ),
+    return AspectRatio(
+      aspectRatio: width / height,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(4),
+        child: OctoImage(
+          image: CachedNetworkImageProvider(imageUrl),
+          placeholderBuilder: OctoPlaceholder.blurHash(
+            blurHash != null ? blurHash : "LBAdAqof00WCqZj[PDay0.WB}pof",
           ),
-          placeholder: (context, url) => BlurHash(
-            hash:
-                blur_hash != null ? blur_hash : "LBAdAqof00WCqZj[PDay0.WB}pof",
-          ),
-          errorWidget: (context, url, error) => Icon(Icons.error),
+          errorBuilder: OctoError.icon(color: Colors.red),
+          fit: BoxFit.cover,
         ),
-      ],
+      ),
     );
   }
 }

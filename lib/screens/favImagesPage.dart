@@ -91,12 +91,10 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
                         crossAxisSpacing: 10,
                       ),
                       itemCount: favImageProvider.favImageList.length,
-                      shrinkWrap: true,
                       physics: ScrollPhysics(),
                       itemBuilder: (context, index) {
                         FavImage favImage =
                             favImageProvider.favImageList[index];
-
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -115,8 +113,9 @@ class _FavouriteImagesPageState extends State<FavouriteImagesPage> {
                             },
                             child: AppNetWorkImage(
                               imageUrl: favImage.thumb,
-                              blur_hash: favImage.blurHash,
-                              userName: null,
+                              blurHash: favImage.blurHash,
+                              height: 2,
+                              width: 1,
                             ),
                           ),
                         );

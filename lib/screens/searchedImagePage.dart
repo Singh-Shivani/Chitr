@@ -1,12 +1,16 @@
+import 'package:chitrwallpaperapp/helper/helper.dart';
 import 'package:chitrwallpaperapp/modal/responeModal.dart';
-
+import 'package:chitrwallpaperapp/responsive/enums/device_screen_type.dart';
+import 'package:chitrwallpaperapp/responsive/utils/ui_utils.dart';
 import 'package:chitrwallpaperapp/widget/appNetWorkImage.dart';
-import 'package:chitrwallpaperapp/widget/imageNotFound.dart';
+import 'package:chitrwallpaperapp/widget/dismissKeyBoardView.dart';
+import 'package:chitrwallpaperapp/widget/loadingIndicator.dart';
+import 'package:chitrwallpaperapp/widget/loadingView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../api/networking.dart';
 import 'imageView.dart';
-import '../main.dart';
 
 class SearchedImagePage extends StatefulWidget {
   @override
@@ -18,24 +22,51 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
   int pageNumber = 1;
   List<UnPlashResponse> unPlashResponse = [];
   var _textController = TextEditingController();
-
+  FocusNode searchFocusNode;
   ScrollController _scrollController = ScrollController();
+  bool _loading = false;
+  bool loadMore = true;
 
-  void getSearchedImages(int pageNumber, String query) async {
+  void getSearchedImages(int pageNumber) async {
+    if (loadMore == false) {
+      return;
+    }
     try {
-      var data = await FetchImages().getSearchedImages(pageNumber, query);
+      var data = await FetchImages()
+          .getSearchedImages(pageNumber, _textController.text);
+      if (data.isEmpty) {
+        setState(() {
+          loadMore = false;
+        });
+        Helper().showToast("No Images Found");
+        return;
+      }
       setState(() {
         unPlashResponse.addAll(data);
+        loadMore = true;
+        _loading = false;
       });
     } catch (e) {
       print(e);
+      setState(() {
+        _loading = false;
+      });
     }
   }
 
   void loadMoreImages(String query) async {
+    if (loadMore == false) {
+      return;
+    }
     try {
       pageNumber = pageNumber + 1;
       var data = await FetchImages().getSearchedImages(pageNumber, query);
+      if (data.isEmpty) {
+        setState(() {
+          loadMore = false;
+        });
+        return;
+      }
       setState(() {
         unPlashResponse.addAll(data);
       });
@@ -47,8 +78,8 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
   @override
   void initState() {
     super.initState();
-    getSearchedImages(pageNumber, searchText);
-
+    searchFocusNode = FocusNode();
+    searchFocusNode.requestFocus();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -57,103 +88,102 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
     });
   }
 
+  _onStartScroll(ScrollMetrics metrics) {
+    Helper().dismissKeyBoard(context);
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    searchFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var cellNumber = Helper().getMobileOrientation(context);
+    var mediaQuery = MediaQuery.of(context);
+    DeviceScreenType deviceScreenType = getDeviceType(mediaQuery);
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MyApp(),
-                        ),
-                      );
+      body: DismissKeyBoardView(
+        child: NotificationListener<ScrollNotification>(
+          // ignore: missing_return
+          onNotification: (scrollNotification) {
+            if (scrollNotification is ScrollStartNotification) {
+              _onStartScroll(scrollNotification.metrics);
+            }
+          },
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: <Widget>[
+              SliverAppBar(
+                pinned: deviceScreenType == DeviceScreenType.Tablet ||
+                        deviceScreenType == DeviceScreenType.Desktop
+                    ? true
+                    : false,
+                floating: true,
+                title: Container(
+                  margin: EdgeInsets.symmetric(vertical: 12),
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                  ),
+                  child: TextField(
+                    focusNode: searchFocusNode,
+                    onSubmitted: (value) {
+                      searchFocusNode.unfocus();
+                      setState(() {
+                        searchText = value;
+                        getSearchedImages(
+                          pageNumber,
+                        );
+                        _loading = true;
+                      });
                     },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
+                    controller: _textController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      filled: true,
+                      hintText: "Search Images",
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          _textController.clear();
+                          setState(() {
+                            searchText = "";
+                            unPlashResponse.clear();
+                            loadMore = true;
+                          });
                         },
-                        child: Icon(Icons.arrow_back_ios),
+                        icon: Icon(
+                          Icons.clear,
+                        ),
                       ),
                     ),
                   ),
-                  Flexible(
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          TextField(
-                            onSubmitted: (value) {
-                              setState(() {
-                                searchText = value;
-                                getSearchedImages(pageNumber, searchText);
-                              });
-                            },
-                            controller: _textController,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              filled: true,
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  _textController.clear();
-                                  setState(() {
-                                    unPlashResponse.clear();
-                                  });
-                                },
-                                icon: Icon(
-                                  Icons.clear,
-                                  color: Color.fromRGBO(13, 26, 59, 1),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-            (searchText == null || searchText.isEmpty)
-                ? Expanded(
-                    child: Text("Search Here"),
-                  )
-                : Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: GridView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          controller: _scrollController,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 0.6,
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 12,
-                            crossAxisSpacing: 12,
-                          ),
+              (searchText == null || searchText.isEmpty)
+                  ? SliverFillRemaining(
+                      child: Center(
+                          child: Icon(
+                        Icons.search,
+                        color: Theme.of(context).accentColor,
+                        size: 66,
+                      )),
+                    )
+                  : _loading == true
+                      ? SliverFillRemaining(
+                          child: LoadingView(
+                          isSliver: false,
+                        ))
+                      : SliverStaggeredGrid.countBuilder(
+                          crossAxisCount: cellNumber,
                           itemCount: unPlashResponse.length + 1,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
+                          itemBuilder: (BuildContext context, int index) {
                             if (index == unPlashResponse.length) {
-                              return Center(
-                                child: SizedBox(
-                                  // width: 30,
-                                  // height: 30,
-                                  child: CircularProgressIndicator(),
-                                ),
+                              return LoadingIndicator(
+                                isLoading: loadMore,
                               );
                             } else {
                               UnPlashResponse item = unPlashResponse[index];
@@ -168,20 +198,27 @@ class _SearchedImagePageState extends State<SearchedImagePage> {
                                     ),
                                   );
                                 },
-                                child: Hero(
-                                  tag: item.id,
-                                  child: AppNetWorkImage(
-                                    imageUrl: item.urls.thumb,
-                                    blur_hash: item.blurHash,
-                                    userName: item.user.name,
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                      left: 4.0, right: 4.0, top: 8),
+                                  child: Hero(
+                                    tag: item.id,
+                                    child: AppNetWorkImage(
+                                      blurHash: item.blurHash,
+                                      height: item.height,
+                                      imageUrl: item.urls.small,
+                                      width: item.width,
+                                    ),
                                   ),
                                 ),
                               );
                             }
-                          }),
-                    ),
-                  ),
-          ],
+                          },
+                          staggeredTileBuilder: (int index) =>
+                              StaggeredTile.fit(2),
+                        ),
+            ],
+          ),
         ),
       ),
     );

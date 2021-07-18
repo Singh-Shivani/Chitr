@@ -13,28 +13,55 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.0
-  http: ^0.12.1
+  http: ^0.13.3
   salomon_bottom_bar: ^2.0.0
   like_button: ^0.2.0
-  image_downloader: ^0.19.2
+  image_downloader: ^0.20.1
   overlay_support: ^1.0.4
   gradient_text: ^1.0.2
-  cached_network_image: ^2.3.3
-  material_floating_search_bar: ^0.2.3
-  flappy_search_bar: 1.4.1
-  flutter_staggered_grid_view: ^0.3.2
-  flutter_blurhash: ^0.5.0
+  shared_preferences: ^2.0.5
+  flutter_staggered_grid_view: ^0.4.0
+  flutter_blurhash: ^0.6.0
   provider: ^4.3.2+2
-  shared_preferences:
+  simple_gesture_detector: ^0.1.4
+  filesize: ^1.0.4
+  cached_network_image: 
+  connectivity: ^2.0.2
+  data_connection_checker: ^0.3.4
+  fluttertoast: ^7.1.8
+  animate_do: ^1.7.5
+  progress_indicators: ^0.1.5
+  flutter_html:
+  flutter_native_splash: ^1.1.8+4
+  flutter_statusbarcolor: ^0.2.3
+  octo_image: ^1.0.0+1
+  path_provider: ^2.0.2
+  path_provider_macos: ^2.0.0
+  flowder: ^0.2.0
+  glass_kit: ^2.0.1
+
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/appIcon/app_icon.png
+  android: true
+  ios: true
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/appIcon/app_icon.png"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.9.0
 
 flutter:
   uses-material-design: true
   assets:
     - images/
+    - assets/json/loading.json
 
   fonts:
     - family: DancingScript
